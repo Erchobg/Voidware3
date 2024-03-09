@@ -303,18 +303,18 @@ end
 local entityLibrary = shared.vapeentity
 local entityLibrary = entityLibrary
 local WhitelistFunctions = shared.vapewhitelist
-local RunLoops = {VoidwareStepTable = {}, StepTable = {}, HeartTable = {}}
+local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
 do
-	function RunLoops:BindToVoidwareStep(name, func)
-		if RunLoops.VoidwareStepTable[name] == nil then
-			RunLoops.VoidwareStepTable[name] = runService.VoidwareStepped:Connect(function(...) pcall(func, unpack({...})) end)
+	function RunLoops:BindToRenderStep(name, func)
+		if RunLoops.RenderStepTable[name] == nil then
+			RunLoops.RenderStepTable[name] = runService.RenderStepped:Connect(function(...) pcall(func, unpack({...})) end)
 		end
 	end
 
-	function RunLoops:UnbindFromVoidwareStep(name)
-		if RunLoops.VoidwareStepTable[name] then
-			RunLoops.VoidwareStepTable[name]:Disconnect()
-			RunLoops.VoidwareStepTable[name] = nil
+	function RunLoops:UnbindFromRenderStep(name)
+		if RunLoops.RenderStepTable[name] then
+			RunLoops.RenderStepTable[name]:Disconnect()
+			RunLoops.RenderStepTable[name] = nil
 		end
 	end
 
@@ -1934,7 +1934,7 @@ runFunction(function()
 		Name = 'AimAssist',
 		Function = function(calling)
 			if calling then
-				RunLoops:BindToVoidwareStep('AimAssist', function(dt)
+				RunLoops:BindToRenderStep('AimAssist', function(dt)
 					vapeTargetInfo.Targets.AimAssist = nil
 					if ((not AimAssistClickAim.Enabled) or (tick() - bedwars.SwordController.lastSwing) < 0.4) then
 						local plr = EntityNearPosition(18)
@@ -1959,7 +1959,7 @@ runFunction(function()
 					end
 				end)
 			else
-				RunLoops:UnbindFromVoidwareStep('AimAssist')
+				RunLoops:UnbindFromRenderStep('AimAssist')
 				vapeTargetInfo.Targets.AimAssist = nil
 			end
 		end,
@@ -6680,10 +6680,10 @@ runFunction(function()
 					end))
 				end
 				if nametagloop[methodused] then 
-					RunLoops:BindToVoidwareStep("NameTags", nametagloop[methodused])
+					RunLoops:BindToRenderStep("NameTags", nametagloop[methodused])
 				end
 			else
-				RunLoops:UnbindFromVoidwareStep("NameTags")
+				RunLoops:UnbindFromRenderStep("NameTags")
 				if nametagfuncs2[methodused] then
 					for i,v in next, (nametagsfolderdrawing) do 
 						nametagfuncs2[methodused](i)
@@ -9276,7 +9276,7 @@ runFunction(function()
 					return oldhitblock(...)
 				end
 			else
-				RunLoops:UnbindFromVoidwareStep('AutoTool')
+				RunLoops:UnbindFromRenderStep('AutoTool')
 				bedwars.BlockBreaker.enable = oldenable2
 				bedwars.BlockBreaker.disable = olddisable2
 				bedwars.BlockBreaker.hitBlock = oldhitblock
