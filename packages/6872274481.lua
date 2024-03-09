@@ -13222,7 +13222,7 @@ runFunction(function()
 					if bedwarsStore.matchState == 0 then repeat task.wait() until bedwarsStore.matchState ~= 0 or not Autowin.Enabled end
 					if not shared.VapeFullyLoaded then repeat task.wait() until shared.VapeFullyLoaded or not Autowin.Enabled end
 					if not Autowin.Enabled then return end
-					vapeAssert(not bedwarsStore.queueType:find("skywars"), "Autowin", "Skywars not supported.", 7, true, true, "Autowin")
+					--vapeAssert(not bedwarsStore.queueType:find("skywars"), "Autowin", "Skywars not supported.", 7, true, true, "Autowin")
 					if isAlive(lplr, true) then
 						lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
 						lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
