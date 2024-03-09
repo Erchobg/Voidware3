@@ -640,18 +640,18 @@ do
 end
 shared.vapewhitelist = WhitelistFunctions
 
-local RunLoops = {VoidwareStepTable = {}, StepTable = {}, HeartTable = {}}
+local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
 do
-	function RunLoops:BindToVoidwareStep(name, func)
-		if RunLoops.VoidwareStepTable[name] == nil then
-			RunLoops.VoidwareStepTable[name] = runService.VoidwareStepped:Connect(function(...) pcall(func, unpack({...})) end)
+	function RunLoops:BindToRenderStep(name, func)
+		if RunLoops.RenderStepTable[name] == nil then
+			RunLoops.RenderStepTable[name] = runService.RenderStepped:Connect(function(...) pcall(func, unpack({...})) end)
 		end
 	end
 
-	function RunLoops:UnbindFromVoidwareStep(name)
-		if RunLoops.VoidwareStepTable[name] then
-			RunLoops.VoidwareStepTable[name]:Disconnect()
-			RunLoops.VoidwareStepTable[name] = nil
+	function RunLoops:UnbindFromRenderStep(name)
+		if RunLoops.RenderStepTable[name] then
+			RunLoops.RenderStepTable[name]:Disconnect()
+			RunLoops.RenderStepTable[name] = nil
 		end
 	end
 
@@ -754,7 +754,7 @@ runFunction(function()
 		Function = function(callback)
 			Radar.SetVisible(callback) 
 			if callback then
-				RunLoops:BindToVoidwareStep('Radar', function() 
+				RunLoops:BindToRenderStep('Radar', function() 
 					if entityLibrary.isAlive then
 						local v278 = (CFrame.new(0, 0, 0):inverse() * entityLibrary.character.HumanoidRootPart.CFrame).p * 0.2 * Vector3.new(1, 1, 1);
 						local v279, v280, v281 = gameCamera.CFrame:ToOrientation();
@@ -798,7 +798,7 @@ runFunction(function()
 					end
 				end)
 			else
-				RunLoops:UnbindFromVoidwareStep('Radar')
+				RunLoops:UnbindFromRenderStep('Radar')
 				RadarMainFrame:ClearAllChildren()
 				table.clear(radartable)
 			end
@@ -2147,7 +2147,7 @@ runFunction(function()
 					HighJump.ToggleButton()
 				else
 					local debounce = 0
-					RunLoops:BindToVoidwareStep('HighJump', function()
+					RunLoops:BindToRenderStep('HighJump', function()
 						if entityLibrary.isAlive and entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air and inputService:IsKeyDown(Enum.KeyCode.Space) and (tick() - debounce) > 0.3 then
 							debounce = tick()
 							if HighJumpMode.Value == 'Normal' then  
@@ -2166,7 +2166,7 @@ runFunction(function()
 					end)
 				end
 			else
-				RunLoops:UnbindFromVoidwareStep('HighJump')
+				RunLoops:UnbindFromRenderStep('HighJump')
 			end
 		end,
 		HoverText = 'Lets you jump higher'
@@ -2751,9 +2751,9 @@ runFunction(function()
 				table.insert(Arrows.Connections, GuiLibrary.ObjectsThatCanBeSaved.FriendsListTextCircleList.Api.FriendColorRefresh.Event:Connect(function()
                     arrowColorFunction(ESPColor.Hue, ESPColor.Sat, ESPColor.Value)
                 end))
-				RunLoops:BindToVoidwareStep('Arrows', arrowLoopFunction)
+				RunLoops:BindToRenderStep('Arrows', arrowLoopFunction)
             else
-                RunLoops:UnbindFromVoidwareStep('Arrows') 
+                RunLoops:UnbindFromRenderStep('Arrows') 
 				for i,v in next, (ArrowsFolderTable) do 
                     arrowRemoveFunction(i)
                 end
@@ -3440,10 +3440,10 @@ runFunction(function()
 					end))
 				end
 				if esploop[methodused] then 
-					RunLoops:BindToVoidwareStep('ESP', esploop[methodused])
+					RunLoops:BindToRenderStep('ESP', esploop[methodused])
 				end
 			else
-				RunLoops:UnbindFromVoidwareStep('ESP')
+				RunLoops:UnbindFromRenderStep('ESP')
 				if espfuncs2[methodused] then
 					for i,v in next, (espfolderdrawing) do 
 						espfuncs2[methodused](i)
@@ -3665,7 +3665,7 @@ runFunction(function()
 				end)
 			else
 				if HealthText then HealthText:Remove() end
-				RunLoops:UnbindFromVoidwareStep('Health')
+				RunLoops:UnbindFromRenderStep('Health')
 			end
 		end,
 		HoverText = 'Displays your health in the center of your screen.'
@@ -3921,10 +3921,10 @@ runFunction(function()
 					end))
 				end
 				if nametagloop[methodused] then 
-					RunLoops:BindToVoidwareStep("NameTags", nametagloop[methodused])
+					RunLoops:BindToRenderStep("NameTags", nametagloop[methodused])
 				end
 			else
-				RunLoops:UnbindFromVoidwareStep("NameTags")
+				RunLoops:UnbindFromRenderStep("NameTags")
 				if nametagfuncs2[methodused] then
 					for i,v in next, (nametagsfolderdrawing) do 
 						nametagfuncs2[methodused](i)
@@ -4182,10 +4182,10 @@ runFunction(function()
 					end))
 				end
 				if tracersloop[methodused] then 
-					RunLoops:BindToVoidwareStep('Tracers', tracersloop[methodused])
+					RunLoops:BindToRenderStep('Tracers', tracersloop[methodused])
 				end
 			else
-				RunLoops:UnbindFromVoidwareStep('Tracers')
+				RunLoops:UnbindFromRenderStep('Tracers')
 				for i,v in next, (tracersfolderdrawing) do 
 					if tracersfuncs2[methodused] then
 						tracersfuncs2[methodused](i)
@@ -4450,7 +4450,7 @@ runFunction(function()
 				panSpring:Reset(Vector2.new())
 
 				playerstate.Push()
-				RunLoops:BindToVoidwareStep('Freecam', function(dt)
+				RunLoops:BindToRenderStep('Freecam', function(dt)
 					local vel = velSpring:Update(dt, Input.Vel(dt))
 					local pan = panSpring:Update(dt, Input.Pan(dt))
 
@@ -4469,7 +4469,7 @@ runFunction(function()
 				Input.StartCapture()
 			else
 				Input.StopCapture()
-				RunLoops:UnbindFromVoidwareStep('Freecam')
+				RunLoops:UnbindFromRenderStep('Freecam')
 				playerstate.Pop()
 			end
 		end,
@@ -9740,7 +9740,7 @@ end)
 					repeat task.wait()
 						if MovementDisablerR.Enabled then
 							lplr.Character.Humanoid.AutoRotate = false
-							runService.VoidwareStepped:Connect(function()
+							runService.RenderStepped:Connect(function()
 								movedir += lplr.Character.Humanoid.MoveDirection
 								lplr.Character.Humanoid:Move(movedir, true)
 								movedir = Vector3.new()
