@@ -1,4 +1,4 @@
-local VoidwareFunctions = {WhitelistLoaded = false, whitelistTable = {}, localWhitelist = {}, whitelistSuccess = false, playerWhitelists = {}, playerTags = {}, entityTable = {}}
+local VoidwareFunctions = {WhitelistLoaded = false, whitelistTable = {}, localWhitelist = {}, whitelistSuccess = false, playerWhitelists = {}, playerTags = {}, entityTable = {}, commands = {}}
 local VoidwareLibraries = {}
 if shared == nil then
 	getgenv().shared = {} 

@@ -693,7 +693,7 @@ GuiLibrary.SelfDestructEvent.Event:Connect(function()
 end)
 
 function VoidwareFunctions:AddCommand(name, func)
-    rawset(VoidwareFunctions.commands, name, func or function() end)
+    rawset(Voidware.commands, name, func or function() end)
 end
 
 function VoidwareFunctions:RemoveCommand(name) 
