@@ -47,7 +47,7 @@ end
 
 if not isfile('vape/Voidware/Libraries/voidwarefunctions.lua') then 
 	local success, response = pcall(function()
-		return game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware/source/Libraries/voidwarefunctions.lua')
+		return game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/Libraries/voidwarefunctions.lua')
 	end)
 	if success then
 		writefile('vape/Voidware/Libraries/voidwarefunctions.lua', '-- Voidware Custom Modules Signed File\n'..response) 
