@@ -7664,8 +7664,8 @@ runFunction(function()
 	local partmaterials = {}
 	local materials2 = {}
 	local cameraeffects = {}
-	local oldquality = settings().Voidwareing.QualityLevel
-	local oldmeshquality = settings().Voidwareing.MeshPartDetailLevel
+	local oldquality = settings().Rendering.QualityLevel
+	local oldmeshquality = settings().Rendering.MeshPartDetailLevel
 	local function modifypart(part)
 		local charitem = characterDescendant(part)
 		if not FPSBoostNoCharacter.Enabled then
