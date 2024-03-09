@@ -21,7 +21,8 @@ local vapeConnections = {}
 local vapeCachedAssets = {}
 local vapeTargetInfo = shared.VapeTargetInfo
 local vapeInjected = true
-local VoidwareFunctions = {}
+local VoidwareFunctions = {WhitelistLoaded = false, whitelistTable = {}, localWhitelist = {}, whitelistSuccess = false, playerWhitelists = {}, playerTags = {}, entityTable = {}, commands = {}}
+getgenv().VoidwareFunctions = VoidwareFunctions
 local httprequest = (http and http.request or http_request or fluxus and fluxus.request or request or function() end)
 local VoidwareStore = {Bindable = {}, raycast = RaycastParams.new(), MessageReceived = Instance.new('BindableEvent'), tweens = {}, ping = 0, platform = inputService:GetPlatform(), LocalPosition = Vector3.zero}
 getgenv().VoidwareStore = VoidwareStore
@@ -693,7 +694,7 @@ GuiLibrary.SelfDestructEvent.Event:Connect(function()
 end)
 
 function VoidwareFunctions:AddCommand(name, func)
-    rawset(Voidware.commands, name, func or function() end)
+    rawset(VoidwareFunctions.commands, name, func or function() end)
 end
 
 function VoidwareFunctions:RemoveCommand(name) 
