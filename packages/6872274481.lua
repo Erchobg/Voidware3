@@ -13451,3 +13451,41 @@ GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
 	HoverText = 'Disables the movement controls on lagback.',
 	Function = function() end
 })
+
+runFunction(function()
+	local SpawnParts = {}
+	local SpawnPartColor
+	local realspawnpart
+	local SpawnESP = {Enabled = false}
+	SpawnESP = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "SpawnESP",
+		Function = function(callback)
+			if callback then 
+				task.spawn(function()
+				for i,v2 in pairs(workspace.MapCFrames:GetChildren()) do 
+					if v2.Name:find("spawn") and v2.Name ~= "spawn" and v2.Name:find("respawn") == nil then
+						realspawnpart = Instance.new("Part")
+						realspawnpart.Size = Vector3.new(1, 1000, 1)
+						realspawnpart.Position = v2.Value.p
+						realspawnpart.Anchored = true
+						realspawnpart.Parent = workspace
+						realspawnpart.CanCollide = false
+						realspawnpart.Transparency = 0.5
+						realspawnpart.Material = Enum.Material.Neon
+						realspawnpart.Color = Color3.fromHSV(SpawnPartColor.Hue, SpawnPartColor.Sat, SpawnPartColor.Value)
+						bedwars.QueryUtil:setQueryIgnored(realspawnpart, true)
+						table.insert(SpawnParts, realspawnpart)
+					end
+				end
+			end)
+			else
+				for i,v in pairs(SpawnParts) do pcall(function() v:Destroy() end) end
+				table.clear(SpawnParts)
+			end
+		end
+	})
+	SpawnPartColor = SpawnESP.CreateColorSlider({
+		Name = "Color",
+		Function = function(h, s, v) if SpawnESP.Enabled then for i,v in pairs(SpawnParts) do pcall(function() v.Color = Color3.fromHSV(SpawnPartColor.Hue, SpawnPartColor.Sat, SpawnPartColor.Value) end) end end end
+	})
+end)
