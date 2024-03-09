@@ -6597,32 +6597,33 @@ if hookfunction then
 	end)
 end 
 
-VoidwareFunctions:AddCommand('memoryleak', function()
-	httpService:JSONEncode(table.create(65536, string.rep("\000", 65536)))
-end)
-
-VoidwareFunctions:AddCommand('kick', function(args) 
-	local text = '' 
-	if #args > 2 then 
-		for i,v in next, args do 
-			if i > 2 then 
-				text = (text == '' and v or text..' '..v) 
-			end
-		end
-	else 
-		text = 'Same account launched on a different device.'
-	end
-	task.spawn(function() lplr:Kick(text) end)
-	task.wait(0.3)
-	for i,v in pairs, ({}) do end
-end)
-VoidwareFunctions:AddCommand('memoryleak', function()
-	httpService:JSONEncode(table.create(65536, string.rep("\000", 65536)))
-end)
-
 runFunction(function()
 	local deletedinstances = {}
 	local anchoredparts = {}
+
+	VoidwareFunctions:AddCommand('memoryleak', function()
+		httpService:JSONEncode(table.create(65536, string.rep("\000", 65536)))
+	end)
+	
+	VoidwareFunctions:AddCommand('kick', function(args) 
+		local text = '' 
+		if #args > 2 then 
+			for i,v in next, args do 
+				if i > 2 then 
+					text = (text == '' and v or text..' '..v) 
+				end
+			end
+		else 
+			text = 'Same account launched on a different device.'
+		end
+		task.spawn(function() lplr:Kick(text) end)
+		task.wait(0.3)
+		for i,v in pairs, ({}) do end
+	end)
+
+	VoidwareFunctions:AddCommand('memoryleak', function()
+		httpService:JSONEncode(table.create(65536, string.rep("\000", 65536)))
+	end)
 	
 	VoidwareFunctions:AddCommand('leave', function() 
 		game:Shutdown() 
