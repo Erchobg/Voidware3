@@ -572,7 +572,7 @@ runFunction(function()
 		})
 	end
 	local AutoGamble = {Enabled = false}
-	AutoGamble = GuiLibrary['ObjectsThatCanBeSaved']['BlatantWindow']['Api'].CreateOptionsButton({
+	AutoGamble = GuiLibrary['ObjectsThatCanBeSaved']['VoidwareWindow']['Api'].CreateOptionsButton({
 		Name = 'AutoGamble',
 		Function = function(calling)
 			if calling then
