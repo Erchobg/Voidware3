@@ -276,7 +276,7 @@ return (function(hi)
 		until not gui.Parent
 	end)
 	
-	local profiles = createbutton({Name = 'No Settings', Default = isfile and not isfile('ria.json') or isfile == nil})
+	local profiles = createbutton({Name = 'Have profiles?'})
 	
 	if getgenv then 
 		getgenv().voidwareinstaller = gui 
@@ -303,7 +303,7 @@ return (function(hi)
 	local corescripts = {'GuiLibrary.lua', 'MainScript.lua', 'Universal.lua', 'NewMainScript.lua'} 
 	for i,v in next, corescripts do 
 		registerStep('Downloading vape/'..v, function()
-			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware/source/packages/'..v)
+			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/packages/'..v)
 			if res ~= '404: Not Found' then 
 				writevapefile(v, res) 
 			end
@@ -312,7 +312,7 @@ return (function(hi)
 
 	for i,v in next, ({'6872274481.lua', '6872265039.lua'}) do 
 		registerStep('Downloading vape/CustomModules/'..v, function()
-			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware/source/packages/'..v)
+			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/packages/'..v)
 			if res ~= '404: Not Found' then 
 				writevapefile('CustomModules/'..v, res) 
 			end
@@ -323,7 +323,7 @@ return (function(hi)
 	local profilesfetched
 
 	task.spawn(function()
-		local res = game:HttpGet('https://api.github.com/repos/Erchobg/Voidware/contents/Libraries/Settings')
+		local res = game:HttpGet('https://api.github.com/repos/Erchobg/Voidware3/contents/Libraries/Settings')
 		if res ~= '404: Not Found' then 
 			for i,v in next, httpservice:JSONDecode(res) do 
 				if type(v) == 'table' and v.name then 
@@ -345,7 +345,7 @@ return (function(hi)
 			if not installprofile then 
 				return 
 			end
-			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware/source/Libraries/Settings/'..v)
+			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/Libraries/Settings/'..v)
 			if res ~= '404: Not Found' then 
 				writevapefile('Profiles/'..v, res) 
 			end
