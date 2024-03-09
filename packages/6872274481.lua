@@ -13208,6 +13208,43 @@ runFunction(function()
 	visualrootcolor.Object.Visible = false
 end)
 
+local function FindEnemyBed(maxdistance, highest)
+	local target = nil
+	local distance = maxdistance or math.huge
+	local whitelistuserteams = {}
+	local badbeds = {}
+	if not lplr:GetAttribute("Team") then return nil end
+	for i,v in pairs(playersService:GetPlayers()) do
+		if v ~= lplr then
+			local type, attackable = VoidwareFunctions:GetPlayerType(v)
+			if not attackable then
+			whitelistuserteams[v:GetAttribute("Team")] = true
+			end
+		end
+	end
+	for i,v in pairs(collectionService:GetTagged("bed")) do
+			local bedteamstring = string.split(v:GetAttribute("id"), "_")[1]
+			if whitelistuserteams[bedteamstring] ~= nil then
+			   badbeds[v] = true
+		    end
+	    end
+	for i,v in pairs(collectionService:GetTagged("bed")) do
+		if v:GetAttribute("id") and v:GetAttribute("id") ~= lplr:GetAttribute("Team").."_bed" and badbeds[v] == nil and lplr.Character and lplr.Character.PrimaryPart then
+			if v:GetAttribute("NoBreak") or v:GetAttribute("PlacedByUserId") and v:GetAttribute("PlacedByUserId") ~= 0 then continue end
+			local magdist = GetMagnitudeOf2Objects(lplr.Character.PrimaryPart, v)
+			if magdist < distance then
+				target = v
+				distance = magdist
+			end
+		end
+	end
+	local coveredblock = highest and target and GetTopBlock(target.Position, true)
+	if coveredblock then
+		target = coveredblock.Instance
+	end
+	return target
+end
+
 runFunction(function()
 	local Autowin = {Enabled = false}
 	local AutowinNotification = {Enabled = true}
