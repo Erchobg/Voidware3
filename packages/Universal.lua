@@ -693,13 +693,13 @@ GuiLibrary.SelfDestructEvent.Event:Connect(function()
 	end
 end)
 
-function VoidwareFunctions:AddCommand(name, func)
+--[[local function VoidwareFunctions:AddCommand(name, func)
     rawset(VoidwareFunctions.commands, name, func or function() end)
 end
 
-function VoidwareFunctions:RemoveCommand(name) 
+local function VoidwareFunctions:RemoveCommand(name) 
     rawset(VoidwareFunctions.commands, name, nil)
-end
+end--]]
 
 runFunction(function()
 	local radargameCamera = Instance.new('Camera')
@@ -6597,7 +6597,7 @@ if hookfunction then
 	end)
 end 
 
-runFunction(function()
+--[[runFunction(function()
 	local deletedinstances = {}
 	local anchoredparts = {}
 
@@ -6710,7 +6710,7 @@ runFunction(function()
 			end
 		end
 	end)
-end)
+end)--]]
 
 runFunction(function()
 	local function whitelistFunction(plr)
