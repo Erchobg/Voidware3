@@ -274,7 +274,7 @@ end
 
 task.spawn(function()
 	repeat 
-	for i,v in {"encodeLib.lua", "Hex2Color3.lua"} do 
+	for i,v in {"entityHandler.lua", "sha.lua"} do 
 		task.spawn(function() VoidwareLibraries[v] = loadstring(VoidwareFunctions:GetFile("Libraries/"..v..".lua"))() end)
 	end
 	task.wait(3)
