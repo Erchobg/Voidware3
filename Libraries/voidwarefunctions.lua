@@ -76,7 +76,7 @@ function VoidwareFunctions:GetFile(file, onlineonly, custompath, customrepo)
         else
             task.spawn(error, "[Voidware] Failed to Download "..filepath..(body and " | "..body or ""))
             if table.find(cachederrors, file) == nil then 
-                errorNotification("Voidware", "Failed to Download "..filepath..(body and " | "..body or ""), 30)
+                errorNotification("Voidware", "Failed to Download "..filepath..(body and " | "..body or ""), 5)
                 table.insert(cachederrors, file)
             end
         end
@@ -470,5 +470,6 @@ pcall(function()
 end)
 
 getgenv().VoidwareFunctions = VoidwareFunctions
+shared.VoidwareFunctions = VoidwareFunctions
 
 return VoidwareFunctions
