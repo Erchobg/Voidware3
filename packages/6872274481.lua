@@ -13865,7 +13865,7 @@ LightingTheme = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api.CreateOptionsBu
 				themesky = Instance.new("Sky")
 				local success, err = pcall(themetable[LightingThemeType.Value])
 				err = err and " | "..err or ""
-				vapeAssert(success, "LightingTheme", "Failed to load the "..LightingThemeType.Value.." theme."..err, 5)
+				--vapeAssert(success, "LightingTheme", "Failed to load the "..LightingThemeType.Value.." theme."..err, 5)
 				themesky.Parent = success and lightingService or nil
 				table.insert(LightingTheme.Connections, lightingService.ChildAdded:Connect(function(v)
 					if success and v:IsA("Sky") then 
