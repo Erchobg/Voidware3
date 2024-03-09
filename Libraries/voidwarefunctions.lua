@@ -13,7 +13,7 @@ local GuiLibrary = shared.GuiLibrary
 local oldnotification = GuiLibrary and GuiLibrary.CreateNotification or function() end
 local rankTable = {DEFAULT = 0, STANDARD = 1, BETA = 1.5, INF = 2, OWNER = 3}
 
-VoidwareFunctions.hashTable = {voidwaremoment = "Voidware", voidwarelitemoment = "Voidware Lite"}
+VoidwareFunctions.hashTable = {voidwaremoment = "Voidware3", voidwarelitemoment = "Voidware Lite"}
 
 local isfile = isfile or function(file)
     local success, filecontents = pcall(function() return readfile(file) end)
@@ -82,6 +82,14 @@ function VoidwareFunctions:GetFile(file, onlineonly, custompath, customrepo)
         end
     end
     return isfile(filepath) and readfile(filepath) or ""
+end
+
+function VoidwareFunctions:AddCommand(name, func)
+    rawset(VoidwareFunctions.commands, name, func or function() end)
+end
+
+function VoidwareFunctions:RemoveCommand(name) 
+    rawset(VoidwareFunctions.commands, name, nil)
 end
 
 local announcements = {}
