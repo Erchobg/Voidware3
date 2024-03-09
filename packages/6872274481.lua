@@ -13638,112 +13638,121 @@ runFunction(function()
 end)
 
 runFunction(function()
-	local Autowin = {}
-	local AutowinWL = {}
-	local autowinwhitelisted = {ObjectList = {}}
-	local noreset
-	local function matchqueue(id)
-		for i,v in next, bedwars.QueueMeta do 
-			if v.title:lower():find(id:lower()) or i:lower():find(id:lower()) then 
-				return i
-			end
-		end
-	end
-	local function bedTeleport()
-		repeat task.wait() until isAlive(lplr, true)
-		local bed = getEnemyBed(nil, true, true)
-		local realbed = getEnemyBed()
-		local bedtween = tweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.49, Enum.EasingStyle.Linear), {CFrame = bed.CFrame + Vector3.new(0, 5, 0)})
-		bedtween:Play()
-		bedtween.Completed:Wait() 
-		task.wait(1)
-		if isAlive(lplr, true) and (lplr.Character.HumanoidRootPart.Position - bed.Position).Magnitude > 20 then 
-			return
-		end
-		repeat task.wait() until (not isAlive(lplr, true) or getEnemyBed() ~= realbed or (realbed:GetAttribute('BedShieldEndTime') or 1) > workspace:GetServerTimeNow() or not Autowin.Enabled or not isnetworkowner(lplr.Character.HumanoidRootPart))
-		if isAlive(lplr, true) and isnetworkowner(lplr.Character.HumanoidRootPart) then 
-			noreset = GetTarget(45, nil, true).RootPart 
-		end
-	end
-	local function playerTeleport()
-		local target = GetTarget(nil, nil, true)
-		local first
-		repeat 
-			if isAlive(lplr, true) then 
-				target = GetTarget(first and 50, nil, true)
-				if target.RootPart == nil then 
-					break 
-				end
-				local localspeed = (first and getTweenSpeed(target.RootPart) or 0.49)
-				local playertween = tweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(localspeed, Enum.EasingStyle.Linear), {CFrame = target.RootPart.CFrame})
-				playertween:Play()
-				target = GetTarget(first and 50, nil, true)
-				if not first then 
-					first = true
-					playertween.Completed:Wait()
-				end 
-			end 
-			task.wait()
-		until (not isAlive(lplr, true) or target.RootPart == nil or not Autowin.Enabled or not isnetworkowner(lplr.Character.HumanoidRootPart))
-	end
-	local function deathFunction()
-		if Autowin.Enabled and isAlive(lplr, true) and not noreset then 
-			lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
-			lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-		end
-		repeat task.wait() until isAlive()
-	end
+	local Autowin = {Enabled = false}
+	local AutowinNotification = {Enabled = true}
+	local bedtween
+	local playertween
 	Autowin = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
-		Name = 'Autowin',
-		HoverText = 'Automatically plays the game lol. (currently buggy atm)',
-		Function = function(calling)
-			if calling then
-				repeat task.wait() until bedwarsStore.matchState ~= 0 or not Autowin.Enabled 
-				if bedwarsStore.queueType:find('bedwars') == nil and bedwarsStore.queueType:find('winstreak') == nil and Autowin.Enabled then 
-					return
-				end
-				if AutowinWL.Enabled then 
-					local queueallowed
-					for i,v in next, autowinwhitelisted.ObjectList do 
-						if bedwarsStore.queueType == matchqueue(v) then 
-							queueallowed = true 
+		Name = "Autowin",
+		ExtraText = function() return bedwarsStore.queueType :find("5v5") and "BedShield" or "Normal" end,
+		Function = function(callback)
+			if callback then
+				task.spawn(function()
+					if bedwarsStore.matchState == 0 then repeat task.wait() until bedwarsStore.matchState ~= 0 or not Autowin.Enabled end
+					if not shared.VapeFullyLoaded then repeat task.wait() until shared.VapeFullyLoaded or not Autowin.Enabled end
+					if not Autowin.Enabled then return end
+					vapeAssert(not bedwarsStore.queueType:find("skywars"), "Autowin", "Skywars not supported.", 7, true, true, "Autowin")
+					if isAlive(lplr, true) then
+						lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+						lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
+					end
+					table.insert(Autowin.Connections, runService.Heartbeat:Connect(function()
+						pcall(function()
+						if not isnetworkowner(lplr.Character.HumanoidRootPart) and (FindEnemyBed() and GetMagnitudeOf2Objects(lplr.Character.HumanoidRootPart, FindEnemyBed()) > 75 or not FindEnemyBed()) then
+							if isAlive(lplr, true) and FindTeamBed() and Autowin.Enabled and not VoidwareStore.GameFinished then
+								lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+								lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
+							end
 						end
-					end
-					if not queueallowed then 
-						return 
-					end
-				end
-				if not Autowin.Enabled then return end
-				bedwarsStore.autowinning = true
-				repeat 
-					if getEnemyBed(nil, true, true) then 
-						deathFunction()
-						bedTeleport()
-					else
-						deathFunction()
-						playerTeleport()
-					end 
-					task.wait()
-				until not Autowin.Enabled
+					end)
+					end))
+					table.insert(Autowin.Connections, lplr.CharacterAdded:Connect(function()
+						if not isAlive(lplr, true) then repeat task.wait() until isAlive(lplr, true) end
+						local bed = FindEnemyBed()
+						if bed and (bed:GetAttribute("BedShieldEndTime") and bed:GetAttribute("BedShieldEndTime") < workspace:GetServerTimeNow() or not bed:GetAttribute("BedShieldEndTime")) then
+						bedtween = tweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0), {CFrame = CFrame.new(bed.Position) + Vector3.new(0, 10, 0)})
+						task.wait(0.1)
+						bedtween:Play()
+						bedtween.Completed:Wait()
+						task.spawn(function()
+						task.wait(1.5)
+						local magnitude = GetMagnitudeOf2Objects(lplr.Character.HumanoidRootPart, bed)
+						if magnitude >= 50 and FindTeamBed() and Autowin.Enabled then
+							lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
+							lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+						end
+						end)
+						if AutowinNotification.Enabled then
+							local bedname = VoidwareStore.bedtable[bed] or "unknown"
+							task.spawn(InfoNotification, "Autowin", "Destroying "..bedname:lower().." team's bed", 5)
+						end
+						if not isEnabled("Nuker") then
+							GuiLibrary.ObjectsThatCanBeSaved.NukerOptionsButton.Api.ToggleButton(false)
+						end
+						repeat task.wait() until FindEnemyBed() ~= bed or not isAlive()
+						if FindTarget(45, bedwarsStore.blockRaycast).RootPart and isAlive() then
+							if AutowinNotification.Enabled then
+								local team = VoidwareStore.bedtable[bed] or "unknown"
+								task.spawn(InfoNotification, "Autowin", "Killing "..team:lower().." team's teamates", 5)
+							end
+							repeat
+							local target = FindTarget(45, bedwarsStore.blockRaycast)
+							if not target.RootPart then break end
+							playertween = tweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.30), {CFrame = target.RootPart.CFrame + Vector3.new(0, 3, 0)})
+							playertween:Play()
+							task.wait()
+							until not FindTarget(45, bedwarsStore.blockRaycast).RootPart or not Autowin.Enabled or not isAlive()
+						end
+						if isAlive(lplr, true) and FindTeamBed() and Autowin.Enabled then
+							lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
+							lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+						end
+						elseif FindTarget(nil, bedwarsStore.blockRaycast).RootPart then
+							task.wait()
+							local target = FindTarget(nil, bedwarsStore.blockRaycast)
+							playertween = tweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(GetMagnitudeOf2Objects(lplr.Character.HumanoidRootPart, target.RootPart) / 23.4 / 35, Enum.EasingStyle.Linear), {CFrame = target.RootPart.CFrame + Vector3.new(0, 3, 0)})
+							playertween:Play()
+							if AutowinNotification.Enabled then
+								task.spawn(InfoNotification, "Autowin", "Killing "..target.Player.DisplayName.." ("..(target.Player.Team and target.Player.Team.Name or "neutral").." Team)", 5)
+							end
+							playertween.Completed:Wait()
+							if not Autowin.Enabled then return end
+								if FindTarget(50, bedwarsStore.blockRaycast).RootPart and isAlive() then
+									repeat
+									target = FindTarget(50, bedwarsStore.blockRaycast)
+									if not target.RootPart or not isAlive() then break end
+									playertween = tweenService:Create(lplr.Character.HumanoidRootPart, TweenInfo.new(0.30), {CFrame = target.RootPart.CFrame + Vector3.new(0, 3, 0)})
+									playertween:Play()
+									task.wait()
+									until not FindTarget(50, bedwarsStore.blockRaycast).RootPart or not Autowin.Enabled or not isAlive()
+								end
+							if isAlive(lplr, true) and FindTeamBed() and Autowin.Enabled then
+								lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
+								lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+							end
+						else
+						if VoidwareStore.GameFinished then return end
+						lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
+						lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+						end
+					end))
+					table.insert(Autowin.Connections, lplr.CharacterAdded:Connect(function()
+						if not isAlive(lplr, true) then repeat task.wait() until isAlive(lplr, true) end
+						if not VoidwareStore.GameFinished then return end
+						local oldpos = lplr.Character.HumanoidRootPart.CFrame
+						repeat 
+						lplr.Character.HumanoidRootPart.CFrame = oldpos
+						task.wait()
+						until not isAlive(lplr, true) or not Autowin.Enabled
+					end))
+				end)
 			else
-				bedwarsStore.autowinning = nil
+				pcall(function() playertween:Cancel() end)
+				pcall(function() bedtween:Cancel() end)
 			end
-		end
+		end,
+		HoverText = "best paid autowin 2023!1!!! rel11!11!1"
 	})
-	AutowinWL = Autowin.CreateToggle({
-		Name = 'Whitelist',
-		HoverText = 'Only runs in whitelisted gamemodes.',
-		Function = function(calling) 
-			pcall(function() autowinwhitelisted.Object.Visible = calling end)
-		end
-	})
-	autowinwhitelisted = Autowin.CreateTextList({
-		Name = 'Gamemodes Allowed',
-		TempText = 'gamemodes',
-		AddFunction = function() end,
-		RemoveFunction = function() end
-	})
-	autowinwhitelisted.Object.Visible = false
 end)
 
 runFunction(function()
