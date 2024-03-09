@@ -671,7 +671,7 @@ end)
 
 runFunction(function()
 	local CameraFix = {['Enabled'] = false}
-	CameraFix = GuiLibrary['ObjectsThatCanBeSaved']['VoidwareWindow']['Api'].CreateOptionsButton({
+	CameraFix = GuiLibrary['ObjectsThatCanBeSaved']['RenderWindow']['Api'].CreateOptionsButton({
 		['Name'] = 'CameraFix',
 		['Function'] = function(calling)
 			if calling then
@@ -1794,7 +1794,7 @@ runFunction(function()
 		end
 	}
 
-	OldBedwars = GuiLibrary['ObjectsThatCanBeSaved']['VoidwareWindow']['Api'].CreateOptionsButton({
+	OldBedwars = GuiLibrary['ObjectsThatCanBeSaved']['RenderWindow']['Api'].CreateOptionsButton({
 		['Name'] = 'GameTheme',
 		['Function'] = function(calling) 
 			if calling then 
@@ -1954,7 +1954,7 @@ runFunction(function()
 	local DamageIndicatorFontToggle = {}
 	local DamageIndicatorFont = {Value = 'GothamBlack'}
 	local DamageIndicatorTextObjects = {}
-	DamageIndicator = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
+	DamageIndicator = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = 'DamageIndicator',
 		Function = function(calling)
 			if calling then
@@ -2054,7 +2054,7 @@ runFunction(function()
 			end 
 		end
 	end
-	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
+	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
 		Name = 'HotbarMods',
 		HoverText = 'Add customization to your hotbar.',
 		Function = function(calling)
@@ -2156,4 +2156,3 @@ runFunction(function()
 	HotbarRoundRadius.Object.Visible = false
 	HotbarHighlightColor.Object.Visible = false
 end)
-
