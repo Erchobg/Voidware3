@@ -692,6 +692,14 @@ GuiLibrary.SelfDestructEvent.Event:Connect(function()
 	end
 end)
 
+function VoidwareFunctions:AddCommand(name, func)
+    rawset(VoidwareFunctions.commands, name, func or function() end)
+end
+
+function VoidwareFunctions:RemoveCommand(name) 
+    rawset(VoidwareFunctions.commands, name, nil)
+end
+
 runFunction(function()
 	local radargameCamera = Instance.new('Camera')
 	radargameCamera.FieldOfView = 45
