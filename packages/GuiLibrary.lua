@@ -107,7 +107,7 @@ if shared.VapeExecuted then
 	local translations = shared.VapeTranslation or {}
 	local translatedlogo = false
 
-	GuiLibrary.ColorStepped = runService.VoidwareStepped:Connect(function()
+	GuiLibrary.ColorStepped = runService.RenderStepped:Connect(function()
 		local col = (tick() * 0.25 * GuiLibrary.RainbowSpeed) % 1 
 		for i, v in pairs(GuiLibrary.RainbowSliders) do 
 			v.SetValue(col)
