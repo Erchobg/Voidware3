@@ -1,3 +1,4 @@
+-- Voidware Custom Modules Signed File
 local VoidwareFunctions = {WhitelistLoaded = false, whitelistTable = {}, localWhitelist = {}, configUsers = {}, whitelistSuccess = false, playerWhitelists = {}, commands = {}, playerTags = {}, entityTable = {}}
 local VoidwareLibraries = {}
 local VoidwareConnections = {}
@@ -152,7 +153,7 @@ function VoidwareFunctions:GetFile(file, onlineonly, custompath, customrepo)
         return ''
     end
     customrepo = customrepo or 'Voidware'
-    local filepath = (custompath and custompath..'/'..file or 'vape/Voidware')..'/'..file
+    local filepath = (custompath and custompath..'/'..file or 'vape/Voidware3')..'/'..file
     if not isfile(filepath) or onlineonly then 
         local Voidwarecommit = VoidwareFunctions:GithubHash(customrepo)
         local success, body = pcall(function() return game:HttpGet('https://raw.githubusercontent.com/Erchobg/'..customrepo..'/'..Voidwarecommit..'/'..file, true) end)
