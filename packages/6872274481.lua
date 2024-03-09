@@ -13208,6 +13208,20 @@ runFunction(function()
 	visualrootcolor.Object.Visible = false
 end)
 
+local function GetMagnitudeOf2Objects(part, part2, bypass)
+	local magnitude, partcount = 0, 0
+	if not bypass then 
+		local suc, res = pcall(function() return part.Position end)
+		partcount = suc and partcount + 1 or partcount
+		suc, res = pcall(function() return part2.Position end)
+		partcount = suc and partcount + 1 or partcount
+	end
+	if partcount > 1 or bypass then 
+		magnitude = bypass and (part - part2).magnitude or (part.Position - part2.Position).magnitude
+	end
+	return magnitude
+end
+
 local function FindEnemyBed(maxdistance, highest)
 	local target = nil
 	local distance = maxdistance or math.huge
