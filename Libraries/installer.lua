@@ -303,7 +303,7 @@ return (function(hi)
 	local corescripts = {'GuiLibrary.lua', 'MainScript.lua', 'Universal.lua', 'NewMainScript.lua'} 
 	for i,v in next, corescripts do 
 		registerStep('Downloading vape/'..v, function()
-			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/packages/'..v)
+			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/main/packages/'..v)
 			if res ~= '404: Not Found' then 
 				writevapefile(v, res) 
 			end
@@ -312,7 +312,7 @@ return (function(hi)
 
 	for i,v in next, ({'6872274481.lua', '6872265039.lua'}) do 
 		registerStep('Downloading vape/CustomModules/'..v, function()
-			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/packages/'..v)
+			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/main/packages/'..v)
 			if res ~= '404: Not Found' then 
 				writevapefile('CustomModules/'..v, res) 
 			end
@@ -345,7 +345,7 @@ return (function(hi)
 			if not installprofile then 
 				return 
 			end
-			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/source/Libraries/Settings/'..v)
+			local res = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/main/Libraries/Settings/'..v)
 			if res ~= '404: Not Found' then 
 				writevapefile('Profiles/'..v, res) 
 			end
