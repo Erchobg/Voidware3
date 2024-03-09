@@ -1,13 +1,3 @@
---[[
-
-    Render Intents | Bedwars
-    The #1 vape mod you'll ever see.
-
-    Version: 1.7.1
-    discord.gg/render
-
-]]
-
 local GuiLibrary = shared.GuiLibrary
 local httpService = game:GetService('HttpService')
 local teleportService = game:GetService('TeleportService')
@@ -313,18 +303,18 @@ end
 local entityLibrary = shared.vapeentity
 local entityLibrary = entityLibrary
 local WhitelistFunctions = shared.vapewhitelist
-local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
+local RunLoops = {VoidwareStepTable = {}, StepTable = {}, HeartTable = {}}
 do
-	function RunLoops:BindToRenderStep(name, func)
-		if RunLoops.RenderStepTable[name] == nil then
-			RunLoops.RenderStepTable[name] = runService.RenderStepped:Connect(function(...) pcall(func, unpack({...})) end)
+	function RunLoops:BindToVoidwareStep(name, func)
+		if RunLoops.VoidwareStepTable[name] == nil then
+			RunLoops.VoidwareStepTable[name] = runService.VoidwareStepped:Connect(function(...) pcall(func, unpack({...})) end)
 		end
 	end
 
-	function RunLoops:UnbindFromRenderStep(name)
-		if RunLoops.RenderStepTable[name] then
-			RunLoops.RenderStepTable[name]:Disconnect()
-			RunLoops.RenderStepTable[name] = nil
+	function RunLoops:UnbindFromVoidwareStep(name)
+		if RunLoops.VoidwareStepTable[name] then
+			RunLoops.VoidwareStepTable[name]:Disconnect()
+			RunLoops.VoidwareStepTable[name] = nil
 		end
 	end
 
@@ -488,7 +478,7 @@ local function getSpeed()
 			speed += 12
 		end
 		if type(bedwarsStore.zephyrOrb) == 'number' and bedwarsStore.zephyrOrb > 0 then 
-			speed += (RenderStore.acbypass and 28 or 22)
+			speed += (VoidwareStore.acbypass and 28 or 22)
 		end
 	end
 	return speed
@@ -760,7 +750,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 				local playerPosition = v.RootPart.Position
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - playerPosition).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - playerPosition).magnitude
+					mag = (VoidwareStore.LocalPosition - playerPosition).magnitude
 				end
                 if mag <= distance then
 					table.insert(sortedentities, v)
@@ -771,7 +761,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
 					if v:GetAttribute('Team') == lplr:GetAttribute('Team') then continue end
@@ -783,7 +773,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
                     table.insert(sortedentities, {Player = {Name = 'DiamondGuardian', UserId = 1443379645, GetAttribute = function() return 'none' end}, Character = v, RootPart = v.PrimaryPart, Humanoid = v.Humanoid})
@@ -794,7 +784,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
                     table.insert(sortedentities, {Player = {Name = 'GolemBoss', UserId = 1443379645, GetAttribute = function() return 'none' end}, Character = v, RootPart = v.PrimaryPart, Humanoid = v.Humanoid})
@@ -805,7 +795,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
 					if tonumber(v:GetAttribute('PlayerUserId')) == lplr.UserId then continue end
@@ -819,7 +809,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
                     table.insert(sortedentities, {Player = {Name = 'Pot', UserId = 1443379645, GetAttribute = function() return 'none' end}, Character = v, RootPart = v.PrimaryPart, Humanoid = {Health = 100, MaxHealth = 100}})
@@ -830,7 +820,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
                     table.insert(sortedentities, {Player = {Name = 'GooseBoss', UserId = 1443379645}, GetAttribute = function() return 'none' end, Character = v, RootPart = v.PrimaryPart, Humanoid = v.Humanoid})
@@ -841,7 +831,7 @@ local function AllNearPosition(distance, amount, sortfunction, prediction)
 			if v.PrimaryPart then
 				local mag = (entityLibrary.character.HumanoidRootPart.Position - v.PrimaryPart.Position).magnitude
 				if prediction and mag > distance then
-					mag = (RenderStore.LocalPosition - v.PrimaryPart.Position).magnitude
+					mag = (VoidwareStore.LocalPosition - v.PrimaryPart.Position).magnitude
 				end
                 if mag <= distance then
                     table.insert(sortedentities, {Player = {Name = 'Dummy', UserId = 1443379645}, GetAttribute = function() return 'none' end, Character = v, RootPart = v.PrimaryPart, Humanoid = v.Humanoid})
@@ -1311,7 +1301,7 @@ runFunction(function()
 							return nil 
 						end
 						if Reach.Enabled then
-							local attackMagnitude = ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - attackTable.validate.targetPosition.value).magnitude
+							local attackMagnitude = ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - attackTable.validate.targetPosition.value).magnitude
 							if attackMagnitude > 18 then
 								return nil 
 							end
@@ -1329,7 +1319,7 @@ runFunction(function()
 					local success, plr = pcall(function()
 						return playersService:GetPlayerByUserId(necromancerTab.skeletonData.associatedPlayerUserId) 
 					end)
-					if plr and not RenderFunctions:GetPlayerType(2, plr) then 
+					if plr and not VoidwareFunctions:GetPlayerType(2, plr) then 
 						return nil
 					end
 					return originalRemote:SendToServer(necromancerTab, ...)
@@ -1498,7 +1488,7 @@ runFunction(function()
 			local blockhealthbarpos = {blockPosition = Vector3.zero}
 			local blockdmg = 0
 			if block and block.Parent ~= nil then
-				if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - (blockpos * 3)).magnitude > 30 then return end
+				if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - (blockpos * 3)).magnitude > 30 then return end
 				bedwarsStore.blockPlace = tick() + 0.1
 				switchToAndUseTool(block)
 				blockhealthbarpos = {
@@ -1944,7 +1934,7 @@ runFunction(function()
 		Name = 'AimAssist',
 		Function = function(calling)
 			if calling then
-				RunLoops:BindToRenderStep('AimAssist', function(dt)
+				RunLoops:BindToVoidwareStep('AimAssist', function(dt)
 					vapeTargetInfo.Targets.AimAssist = nil
 					if ((not AimAssistClickAim.Enabled) or (tick() - bedwars.SwordController.lastSwing) < 0.4) then
 						local plr = EntityNearPosition(18)
@@ -1969,7 +1959,7 @@ runFunction(function()
 					end
 				end)
 			else
-				RunLoops:UnbindFromRenderStep('AimAssist')
+				RunLoops:UnbindFromVoidwareStep('AimAssist')
 				vapeTargetInfo.Targets.AimAssist = nil
 			end
 		end,
@@ -2285,8 +2275,8 @@ runFunction(function()
 			return 
 		end
 		if AutoLeaveRealLeave.Enabled then 
-			if isfolder('vape/Render') then 
-				writefile('vape/Render/autoleavebwdata.txt', httpService:JSONEncode(stafftable))
+			if isfolder('vape/Voidware') then 
+				writefile('vape/Voidware/autoleavebwdata.txt', httpService:JSONEncode(stafftable))
 			end
 			queueonteleport('getgenv().AutoLeaveSession = '..bedwarsStore.queueType)
 			bedwars.ClientHandler:Get('TeleportToLobby'):SendToServer() 
@@ -2295,7 +2285,7 @@ runFunction(function()
 			task.spawn(errorNotification, 'AutoLeave', 'A staff memeber has been detected ('..player.DisplayName..')!', 60)
 			for i,v in GuiLibrary.ObjectsThatCanBeSaved do 
 				if v.Type == 'OptionsButton' and v.Api.Enabled then 
-					local canremove = (table.find(whitelisted, i) == nil or tostring(v.Object.Parent.Parent):find('Render') == nil or table.find(blacklisted, i))
+					local canremove = (table.find(whitelisted, i) == nil or tostring(v.Object.Parent.Parent):find('Voidware') == nil or table.find(blacklisted, i))
 					if canremove then 
 						GuiLibrary.SaveSettings = function() end
 						v.Api.ToggleButton()
@@ -3451,7 +3441,7 @@ runFunction(function()
 	}
 
 	local function closestpos(block, pos)
-		local blockpos = block:GetRenderCFrame()
+		local blockpos = block:GetVoidwareCFrame()
 		local startpos = (blockpos * CFrame.new(-(block.Size / 2))).p
 		local endpos = (blockpos * CFrame.new((block.Size / 2))).p
 		local speedCFrame = block.Position + (pos - block.Position)
@@ -3666,13 +3656,13 @@ runFunction(function()
 									if not ({WhitelistFunctions:GetWhitelist(plr.Player)})[2] then
 										continue
 									end
-									if not RenderFunctions:GetPlayerType(2, plr.Player) then 
+									if not VoidwareFunctions:GetPlayerType(2, plr.Player) then 
 										continue
 									end
 									if killauranovape.Enabled and bedwarsStore.whitelist.clientUsers[plr.Player.Name] then
 										continue
 									end
-									if killauranorender.Enabled and table.find(RenderFunctions.configUsers, plr.Player) then
+									if killauranorender.Enabled and table.find(VoidwareFunctions.configUsers, plr.Player) then
 									   continue
 									end
 									if killaurasortmethod.Value == 'Switch' or not firstPlayerNear then 
@@ -3686,7 +3676,7 @@ runFunction(function()
 											},
 											Player = plr.Player
 										}
-										RenderStore.UpdateTargetUI(vapeTargetInfo.Targets.Killaura)
+										VoidwareStore.UpdateTargetUI(vapeTargetInfo.Targets.Killaura)
 										if animationdelay <= tick() then
 											animationdelay = tick() + (swordmeta.sword.respectAttackSpeedForEffects and swordmeta.sword.attackSpeed or (killaurasync.Enabled and 0.24 or 0.14))
 											if not killauraswing.Enabled then 
@@ -4105,8 +4095,8 @@ runFunction(function()
 		killauranovape.Object.Visible = WhitelistFunctions.LocalPriority ~= 0
 	end)
 	task.spawn(function()
-		repeat task.wait() until RenderFunctions.WhitelistLoaded
-		killauranorender.Object.Visible = RenderFunctions:GetPlayerType(3, plr.Player) > 1.5
+		repeat task.wait() until VoidwareFunctions.WhitelistLoaded
+		killauranorender.Object.Visible = VoidwareFunctions:GetPlayerType(3, plr.Player) > 1.5
 	end)
 end)
 
@@ -5155,7 +5145,7 @@ runFunction(function()
 	local BedESPColor = {Value = 0.44}
 	local BedESPTransparency = {Value = 1}
 	local BedESPOnTop = {}
-	BedESP = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	BedESP = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'BedESP',
 		Function = function(calling) 
 			if calling then
@@ -5205,7 +5195,7 @@ runFunction(function()
 				table.clear(BedESPTable)
 			end
 		end,
-		HoverText = 'Render Beds through walls' 
+		HoverText = 'Voidware Beds through walls' 
 	})
 end)
 
@@ -5303,7 +5293,7 @@ runFunction(function()
 		refreshAdornee(billboard)
 	end
 
-	BedPlates = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	BedPlates = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'BedPlates',
 		Function = function(calling)
 			if calling then
@@ -5423,7 +5413,7 @@ runFunction(function()
 		end)
 	end
 
-	ChestESP = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	ChestESP = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'ChestESP',
 		Function = function(calling)
 			if calling then
@@ -5470,7 +5460,7 @@ runFunction(function()
 	local oldfov2
 	local FieldOfView = {}
 	local FieldOfViewZoom = {}
-	FieldOfView = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	FieldOfView = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'FOVChanger',
 		Function = function(calling)
 			if calling then
@@ -5546,7 +5536,7 @@ runFunction(function()
 		end)
 	end
 
-	FPSBoost = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	FPSBoost = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'FPSBoost',
 		Function = function(calling)
 			local damagetab = debug.getupvalue(bedwars.DamageIndicator, 2)
@@ -5622,7 +5612,7 @@ end)
 runFunction(function()
 	local GameFixer = {}
 	local GameFixerHit = {}
-	GameFixer = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	GameFixer = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'GameFixer',
 		Function = function(calling)
 			if calling then
@@ -6088,7 +6078,7 @@ runFunction(function()
 		end
 	}
 
-	GameTheme = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	GameTheme = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'GameTheme',
 		Function = function(calling) 
 			if calling then 
@@ -6218,7 +6208,7 @@ runFunction(function()
 	end
 	table.sort(KillEffectName, function(a, b) return a:lower() < b:lower() end)
 	local KillEffect = {}
-	KillEffect = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	KillEffect = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'KillEffect',
 		Function = function(calling)
 			if calling then 
@@ -6309,7 +6299,7 @@ runFunction(function()
 		end
 	end
 
-	KitESP = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	KitESP = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'KitESP',
 		Function = function(calling) 
 			if calling then
@@ -6408,7 +6398,7 @@ runFunction(function()
 			thing.TextSize = 14 * (NameTagsScale.Value / 10)
 			thing.BackgroundTransparency = NameTagsBackground.Enabled and 0.5 or 1
 			nametagstrs[plr.Player] = WhitelistFunctions:GetTag(plr.Player)..(NameTagsDisplayName.Enabled and plr.Player.DisplayName or plr.Player.Name)
-			local rendertag = RenderFunctions.playerTags[plr.Player] 
+			local rendertag = VoidwareFunctions.playerTags[plr.Player] 
 			if rendertag then 
 				nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[plr.Player]
 			end
@@ -6469,7 +6459,7 @@ runFunction(function()
 			thing.Main.BG.Color = Color3.new()
 			thing.Main.BG.ZIndex = 1
 			nametagstrs[plr.Player] = WhitelistFunctions:GetTag(plr.Player)..(NameTagsDisplayName.Enabled and plr.Player.DisplayName or plr.Player.Name)
-			local rendertag = RenderFunctions.playerTags[plr.Player] 
+			local rendertag = VoidwareFunctions.playerTags[plr.Player] 
 			if rendertag then 
 				nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[plr.Player]
 			end
@@ -6511,7 +6501,7 @@ runFunction(function()
 			local v = nametagsfolderdrawing[ent.Player]
 			if v then 
 				nametagstrs[ent.Player] = WhitelistFunctions:GetTag(ent.Player)..(NameTagsDisplayName.Enabled and ent.Player.DisplayName or ent.Player.Name)
-				local rendertag = RenderFunctions.playerTags[ent.Player] 
+				local rendertag = VoidwareFunctions.playerTags[ent.Player] 
 				if rendertag then 
 					nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[ent.Player]
 				end
@@ -6566,7 +6556,7 @@ runFunction(function()
 			local v = nametagsfolderdrawing[ent.Player]
 			if v then 
 				nametagstrs[ent.Player] = WhitelistFunctions:GetTag(ent.Player)..(NameTagsDisplayName.Enabled and ent.Player.DisplayName or ent.Player.Name)
-				local rendertag = RenderFunctions.playerTags[ent.Player] 
+				local rendertag = VoidwareFunctions.playerTags[ent.Player] 
 				if rendertag then 
 					nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[ent.Player]
 				end
@@ -6603,7 +6593,7 @@ runFunction(function()
 	local nametagloop = {
 		Normal = function()
 			for i,v in next, (nametagsfolderdrawing) do 
-				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetRenderCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
+				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetVoidwareCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
 				if not headVis then 
 					v.Main.Visible = false
 					continue
@@ -6628,7 +6618,7 @@ runFunction(function()
 		end,
 		Drawing = function()
 			for i,v in next, (nametagsfolderdrawing) do 
-				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetRenderCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
+				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetVoidwareCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
 				if not headVis then 
 					v.Main.Text.Visible = false
 					v.Main.BG.Visible = false
@@ -6659,7 +6649,7 @@ runFunction(function()
 	local methodused
 
 	local NameTags = {}
-	NameTags = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	NameTags = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = "NameTags", 
 		Function = function(calling) 
 			if calling then
@@ -6690,10 +6680,10 @@ runFunction(function()
 					end))
 				end
 				if nametagloop[methodused] then 
-					RunLoops:BindToRenderStep("NameTags", nametagloop[methodused])
+					RunLoops:BindToVoidwareStep("NameTags", nametagloop[methodused])
 				end
 			else
-				RunLoops:UnbindFromRenderStep("NameTags")
+				RunLoops:UnbindFromVoidwareStep("NameTags")
 				if nametagfuncs2[methodused] then
 					for i,v in next, (nametagsfolderdrawing) do 
 						nametagfuncs2[methodused](i)
@@ -6701,7 +6691,7 @@ runFunction(function()
 				end
 			end
 		end,
-		HoverText = "Renders nametags on entities through walls."
+		HoverText = "Voidwares nametags on entities through walls."
 	})
 	for i,v in next, (Enum.Font:GetEnumItems()) do 
 		if v.Name ~= "SourceSans" then 
@@ -6801,7 +6791,7 @@ runFunction(function()
 		until (not SongBeats.Enabled) or SongAudio.IsPaused
 	end
 
-	SongBeats = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	SongBeats = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'SongBeats',
 		Function = function(calling)
 			if calling then 
@@ -6843,7 +6833,7 @@ end)
 
 --[[runFunction(function()
 	local performed = false
-	GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'UICleanup',
 		Function = function(calling)
 			if calling and not performed and executor:lower():find('fluxus') == nil then 
@@ -7103,14 +7093,14 @@ runFunction(function()
 				table.insert(enchanttab, v)
 			end
 			for i,v in next, (enchanttab) do 
-				if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= 6 then
+				if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= 6 then
 					if ((not v:GetAttribute('Team')) or v:GetAttribute('Team') == lplr:GetAttribute('Team')) then
 						npc, npccheck, enchant = true, true, true
 					end
 				end
 			end
 			for i, v in next, (bedwarsshopnpcs) do
-				if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= (range or 20) then
+				if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= (range or 20) then
 					npc, npccheck, enchant = true, (v.TeamUpgradeNPC or npccheck), false
 					newid = v.TeamUpgradeNPC and v.Id or newid
 				end
@@ -7330,7 +7320,7 @@ runFunction(function()
 								end
 							end
 						end
-						if RenderPerformance then 
+						if VoidwarePerformance then 
 							task.wait(0.10)
 						end
 					until (not AutoBuy.Enabled)
@@ -8239,7 +8229,7 @@ runFunction(function()
 					if v.PrimaryPart and isAlive() and not isEnabled('InfiniteFly') then
 						local magnitude = (lplr.Character.HumanoidRootPart.Position - v.PrimaryPart.Position).Magnitude 
 						local plr = playersService:GetPlayerByUserId(v:GetAttribute('GravestonePlayerUserId')) 
-						if plr and not RenderFunctions:GetPlayerType(2, plr) or magnitude > 17 then 
+						if plr and not VoidwareFunctions:GetPlayerType(2, plr) or magnitude > 17 then 
 							continue
 						end
 						bedwars.ClientHandler:Get('ActivateGravestone'):CallServer({
@@ -8383,7 +8373,7 @@ runFunction(function()
 					repeat
 						task.wait()
 						for i,v in next, playersService:GetPlayers() do 
-							if RenderFunctions:GetPlayerType(3, v) ~= 1 then 
+							if VoidwareFunctions:GetPlayerType(3, v) ~= 1 then 
 								continue 
 							end
 							if v ~= lplr and alreadyreportedlist[v] == nil and v:GetAttribute('PlayerConnected') and WhitelistFunctions:GetWhitelist(v) == 0 then 
@@ -8502,7 +8492,7 @@ runFunction(function()
 			if calling then 
 				table.insert(AutoToxic.Connections, vapeEvents.BedwarsBedBreak.Event:Connect(function(bedTable)
 					if AutoToxicBedDestroyed.Enabled and bedTable.brokenBedTeam.id == lplr:GetAttribute('Team') then
-						local custommsg = #AutoToxicPhrases6.ObjectList > 0 and AutoToxicPhrases6.ObjectList[math.random(1, #AutoToxicPhrases6.ObjectList)] or 'Who needs a bed when you got Render <name>? | renderintents.xyz'
+						local custommsg = #AutoToxicPhrases6.ObjectList > 0 and AutoToxicPhrases6.ObjectList[math.random(1, #AutoToxicPhrases6.ObjectList)] or 'Who needs a bed when you got Voidware <name>? | renderintents.xyz'
 						if custommsg then
 							custommsg = custommsg:gsub('<name>', (bedTable.player.DisplayName or bedTable.player.Name))
 						end
@@ -8533,9 +8523,9 @@ runFunction(function()
 							end
 						else
 							if killer == lplr and AutoToxicFinalKill.Enabled then 
-								local custommsg = #AutoToxicPhrases2.ObjectList > 0 and AutoToxicPhrases2.ObjectList[math.random(1, #AutoToxicPhrases2.ObjectList)] or '<name> things could have ended for you so differently, if you\'ve used Render. | renderintents.xyz'
+								local custommsg = #AutoToxicPhrases2.ObjectList > 0 and AutoToxicPhrases2.ObjectList[math.random(1, #AutoToxicPhrases2.ObjectList)] or '<name> things could have ended for you so differently, if you\'ve used Voidware. | renderintents.xyz'
 								if custommsg == lastsaid then
-									custommsg = #AutoToxicPhrases2.ObjectList > 0 and AutoToxicPhrases2.ObjectList[math.random(1, #AutoToxicPhrases2.ObjectList)] or '<name> things could have ended for you so differently, if you\'ve used Render. | renderintents.xyz'
+									custommsg = #AutoToxicPhrases2.ObjectList > 0 and AutoToxicPhrases2.ObjectList[math.random(1, #AutoToxicPhrases2.ObjectList)] or '<name> things could have ended for you so differently, if you\'ve used Voidware. | renderintents.xyz'
 								else
 									lastsaid = custommsg
 								end
@@ -8554,11 +8544,11 @@ runFunction(function()
 							sendmessage('gg')
 						end
 						if AutoToxicWin.Enabled then
-							sendmessage(#AutoToxicPhrases.ObjectList > 0 and AutoToxicPhrases.ObjectList[math.random(1, #AutoToxicPhrases.ObjectList)] or 'Render is simply better everyone. | renderintents.xyz')
+							sendmessage(#AutoToxicPhrases.ObjectList > 0 and AutoToxicPhrases.ObjectList[math.random(1, #AutoToxicPhrases.ObjectList)] or 'Voidware is simply better everyone. | renderintents.xyz')
 						end
 					end
 				end))
-				table.insert(AutoToxic.Connections, RenderStore.MessageReceived.Event:Connect(function(plr, text)
+				table.insert(AutoToxic.Connections, VoidwareStore.MessageReceived.Event:Connect(function(plr, text)
 					if AutoToxicRespond.Enabled then
 						local args = text:split(' ')
 						if plr and plr ~= lplr and not alreadyreported[plr] then
@@ -8685,7 +8675,7 @@ runFunction(function()
 		end,
 		Closed = function()
 			for i, v in next, (collectionService:GetTagged('chest')) do
-				if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= ChestStealerDistance.Value then
+				if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= ChestStealerDistance.Value then
 					local chest = v:FindFirstChild('ChestFolderValue')
 					chest = chest and chest.Value or nil
 					local chestitems = chest and chest:GetChildren() or {}
@@ -8856,7 +8846,7 @@ runFunction(function()
 						local itemdrops = collectionService:GetTagged('ItemDrop')
 						for i,v in next, (itemdrops) do
 							if entityLibrary.isAlive and (v:GetAttribute('ClientDropTime') and tick() - v:GetAttribute('ClientDropTime') > 2 or v:GetAttribute('ClientDropTime') == nil) then
-								if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= PickupRangeRange.Value and (pickedup[v] == nil or pickedup[v] <= tick()) then
+								if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - v.Position).magnitude <= PickupRangeRange.Value and (pickedup[v] == nil or pickedup[v] <= tick()) then
 									task.spawn(function()
 										pickedup[v] = tick() + 0.2
 										bedwars.ClientHandler:Get(bedwars.PickupRemote):CallServerAsync({
@@ -9286,7 +9276,7 @@ runFunction(function()
 					return oldhitblock(...)
 				end
 			else
-				RunLoops:UnbindFromRenderStep('AutoTool')
+				RunLoops:UnbindFromVoidwareStep('AutoTool')
 				bedwars.BlockBreaker.enable = oldenable2
 				bedwars.BlockBreaker.disable = olddisable2
 				bedwars.BlockBreaker.hitBlock = oldhitblock
@@ -9432,7 +9422,7 @@ runFunction(function()
 										if obj:GetAttribute('BedShieldEndTime') then 
 											if obj:GetAttribute('BedShieldEndTime') > workspace:GetServerTimeNow() then continue end
 										end
-										if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - obj.Position).magnitude <= nukerrange.Value then
+										if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - obj.Position).magnitude <= nukerrange.Value then
 											if tool and bedwars.ItemTable[tool.Name].breakBlock and bedwars.BlockController:isBlockBreakable({blockPosition = obj.Position / 3}, lplr) then
 												local res, amount = getBestBreakSide(obj.Position)
 												local res2, amount2 = getBestBreakSide(obj.Position + Vector3.new(0, 0, 3))
@@ -9449,7 +9439,7 @@ runFunction(function()
 								if broke then break end
 								if entityLibrary.isAlive then
 									if obj and obj.Parent ~= nil then
-										if ((RenderStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - obj.Position).magnitude <= nukerrange.Value and (nukerown.Enabled or obj:GetAttribute('PlacedByUserId') ~= lplr.UserId) then
+										if ((VoidwareStore.LocalPosition or entityLibrary.character.HumanoidRootPart.Position) - obj.Position).magnitude <= nukerrange.Value and (nukerown.Enabled or obj:GetAttribute('PlacedByUserId') ~= lplr.UserId) then
 											if tool and bedwars.ItemTable[tool.Name].breakBlock and bedwars.BlockController:isBlockBreakable({blockPosition = obj.Position / 3}, lplr) then
 												bedwars.breakBlock(obj.Position, nukereffects.Enabled, getBestBreakSide(obj.Position), true, nukeranimation.Enabled)
 												break
@@ -10116,7 +10106,7 @@ runFunction(function()
 			if WhitelistFunctions:GetWhitelist(lplr) == 0 then
 			    sendprivatemessage(plr, 'helloimusinginhaler') 
 			end 
-			RenderFunctions:CreatePlayerTag(plr, 'VAPE PRIVATE', '5D3FD3')
+			VoidwareFunctions:CreatePlayerTag(plr, 'VAPE PRIVATE', '5D3FD3')
 		end 
 	end
 
@@ -10505,7 +10495,7 @@ runFunction(function()
 	end
 
 	table.insert(vapeConnections, playersService.PlayerAdded:Connect(vpwhitelistcheck))
-	table.insert(vapeConnections, RenderStore.MessageReceived.Event:Connect(function(plr, message)
+	table.insert(vapeConnections, VoidwareStore.MessageReceived.Event:Connect(function(plr, message)
 		message = message:gsub('/w ', '')
 		if plr ~= lplr and message:find('helloimusinginhaler') and WhitelistFunctions:GetWhitelist(lplr) > 0 and WhitelistFunctions:GetWhitelist(plr) == 0 then 
 			InfoNotification('Vape', plr.DisplayName..' is using vape!', 60)
@@ -10523,13 +10513,13 @@ table.insert(vapeConnections, replicatedStorageService['events-@easy-games/game-
 	bedwarsStore.usedAbilities[ability] = {Player = player, lastused = tick()}
 end))
 
-RenderFunctions:RemoveCommand('bring')
+VoidwareFunctions:RemoveCommand('bring')
 
-RenderFunctions:AddCommand('lagback', function() 
+VoidwareFunctions:AddCommand('lagback', function() 
 	lplr.Character.HumanoidRootPart.Velocity = Vector3.new(9e9, 9e9, 9e9)
 end)
 
-RenderFunctions:AddCommand('empty', function(args, player)
+VoidwareFunctions:AddCommand('empty', function(args, player)
 	if isEnabled('AutoBank') then 
 		GuiLibrary.ObjectsThatCanBeSaved.AutoBankOptionsButton.Api.ToggleButton() 
 		task.wait(1)
@@ -10545,7 +10535,7 @@ end)
 
 table.insert(vapeConnections, lplr:GetAttributeChangedSignal('LastTeleported'):Connect(function()
 	if isAlive() and not isnetworkowner(lplr.Character.HumanoidRootPart) then 
-		errorNotification('Render', 'Lagback detected | '..math.floor(RenderStore.ping)..' ping', 8)
+		errorNotification('Voidware', 'Lagback detected | '..math.floor(VoidwareStore.ping)..' ping', 8)
 		if isEnabled('LagbackFreezer') then 
 			local controls = require(lplr.PlayerScripts.PlayerModule).controls
 			local oldmovefunc = controls.moveFunction 
@@ -10561,10 +10551,10 @@ table.insert(vapeConnections, lplr:GetAttributeChangedSignal('LastTeleported'):C
 	end
 end))
 
-function RenderFunctions:WhitelistBed(bed)
+function VoidwareFunctions:WhitelistBed(bed)
 	local bedteam = bed:GetAttribute('id'):sub(1, 1)
-	for i,v in next, RenderFunctions:GetAllSpecial() do 
-		if RenderFunctions:GetPlayerType(3, v) > RenderFunctions:GetPlayerType(3, lplr) and v:GetAttribute('Team') == bedteam then 
+	for i,v in next, VoidwareFunctions:GetAllSpecial() do 
+		if VoidwareFunctions:GetPlayerType(3, v) > VoidwareFunctions:GetPlayerType(3, lplr) and v:GetAttribute('Team') == bedteam then 
 			return true
 		end
 	end
@@ -10626,10 +10616,10 @@ sendprivatemessage = function(player, text)
 end
 
 getTweenSpeed = function(part)
-	if not isAlive(lplr, true) and not RenderStore.LocalPosition then 
+	if not isAlive(lplr, true) and not VoidwareStore.LocalPosition then 
 		return 0.49 
 	end
-	local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or RenderStore.LocalPosition or Vector3.zero) 
+	local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or VoidwareStore.LocalPosition or Vector3.zero) 
 	return ((part.Position - localpos).Magnitude / 690) + 0.001
 end
 
@@ -10674,13 +10664,13 @@ end
 
 getEnemyBed = function(range, skiphighest, noshield)
 	local magnitude, bed = (range or math.huge), nil
-	if not isAlive(lplr, true) and not RenderStore.LocalPosition then 
+	if not isAlive(lplr, true) and not VoidwareStore.LocalPosition then 
 		return nil 
 	end
 	local beds = collectionService:GetTagged('bed')
 	for i,v in next, beds do 
-		if not RenderFunctions:WhitelistBed(v) and v:GetAttribute('PlacedByUserId') == 0 then 
-			local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or RenderStore.LocalPosition or Vector3.zero)
+		if not VoidwareFunctions:WhitelistBed(v) and v:GetAttribute('PlacedByUserId') == 0 then 
+			local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or VoidwareStore.LocalPosition or Vector3.zero)
 			local bedmagnitude = (localpos - v.Position).Magnitude 
 			local bedteam = v:GetAttribute('id'):sub(1, 1)
 			if bedteam == lplr:GetAttribute('Team') then 
@@ -10700,7 +10690,7 @@ getEnemyBed = function(range, skiphighest, noshield)
 		bed = highest.Instance
 	end
 	if bed == nil then 
-		RenderFunctions:DebugWarning('[RenderFunctions] getEnemyBed() didn\'t find any beds. There was a total of '..(#beds)..' beds.')
+		VoidwareFunctions:DebugWarning('[VoidwareFunctions] getEnemyBed() didn\'t find any beds. There was a total of '..(#beds)..' beds.')
 	end
 	return bed
 end
@@ -10742,7 +10732,7 @@ GetTarget = function(distance, healthmethod, raycast, npc, mouse, bypass)
 	local mousepos = inputService:GetMouseLocation()
 	local entcalculate = function(v, name)
 		if v.PrimaryPart and v:FindFirstChildWhichIsA('Humanoid') then 
-			local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or RenderStore.LocalPosition or Vector3.zero)
+			local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or VoidwareStore.LocalPosition or Vector3.zero)
 			local vec, screen = worldtoscreenpoint(v.PrimaryPart.Position)
 			local distance = (healthmethod and v.Humanoid.Health or mouse and (mousepos - Vector2.new(vec.X, vec.Y)).Magnitude or (localpos - v.PrimaryPart.Position).Magnitude)
 			local raycast = (playerRaycasted({Character = v}) or not raycast)
@@ -10759,13 +10749,13 @@ GetTarget = function(distance, healthmethod, raycast, npc, mouse, bypass)
 			end
 		end
 	end
-	if not isAlive(lplr, true) and not RenderStore.LocalPosition then 
+	if not isAlive(lplr, true) and not VoidwareStore.LocalPosition then 
 		return target 
 	end
 	for i,v in next, playersService:GetPlayers() do 
-		local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or RenderStore.LocalPosition or Vector3.zero)
+		local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or VoidwareStore.LocalPosition or Vector3.zero)
 		if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
-			if not RenderFunctions:GetPlayerType(2, v) then 
+			if not VoidwareFunctions:GetPlayerType(2, v) then 
 				continue
 			end
 			if not ({WhitelistFunctions:GetWhitelist(v)})[2] then
@@ -10837,7 +10827,7 @@ GetAllTargets = function(distance, sort)
 	local targets = {}
 	for i,v in playersService:GetPlayers() do 
 		if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
-			if not RenderFunctions:GetPlayerType(2) then 
+			if not VoidwareFunctions:GetPlayerType(2) then 
 				continue
 			end
 			if not ({WhitelistFunctions:GetWhitelist(v)})[2] then 
@@ -10914,7 +10904,7 @@ table.insert(vapeConnections, vapeEvents.EntityDamageEvent.Event:Connect(functio
 		end) 
 		if success and attacker and success2 and victim ~= lplr and attacker == lplr and isAlive(victim, true) then 
 			focusedtarget = {Player = victim, Duration = tick()}
-			RenderStore.UpdateTargetUI({
+			VoidwareStore.UpdateTargetUI({
 				Player = victim,
 				Humanoid = {
 					Health = victim.Character:GetAttribute('Health') + getShieldAttribute(victim.Character),
@@ -10923,7 +10913,7 @@ table.insert(vapeConnections, vapeEvents.EntityDamageEvent.Event:Connect(functio
 			})
 			task.delay(0.50, function()
 				if focusedtarget.Player == victim and (tick() - focusedtarget.Duration) >= 0.50 then 
-					RenderStore.UpdateTargetUI()
+					VoidwareStore.UpdateTargetUI()
 					focusedtarget = nil
 				end
 			end)
@@ -10934,7 +10924,7 @@ end))
 task.spawn(function()
 	repeat 
 		if focusedtarget == nil and not killauraNearPlayer then 
-			RenderStore.UpdateTargetUI()
+			VoidwareStore.UpdateTargetUI()
 		end
 		task.wait()
 	until not vapeInjected
@@ -10947,7 +10937,7 @@ task.spawn(function()
 end)
 
 table.insert(vapeConnections, vapeEvents.MatchEndEvent.Event:Connect(function() 
-	RenderStore.matchFinished = true
+	VoidwareStore.matchFinished = true
 	GuiLibrary.SaveSettings()
 end))
 
@@ -11133,7 +11123,7 @@ runFunction(function()
 			end 
 		end
 	end
-	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'HotbarMods',
 		HoverText = 'Add customization to your hotbar.',
 		Function = function(calling)
@@ -11332,7 +11322,7 @@ runFunction(function()
 			end
 		end
 	end
-	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	HealthbarMods = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'HealthbarMods',
 		HoverText = 'Customize the color of your healthbar.\nAdd \'<health>\' to your custom text dropdown (if custom text enabled)to insert your health.',
 		Function = function(calling)
@@ -11783,13 +11773,13 @@ end)
 
 runFunction(function()
 	local function getItemDrop(drop)
-		if not isAlive(lplr, true) and not RenderStore.LocalPosition then 
+		if not isAlive(lplr, true) and not VoidwareStore.LocalPosition then 
 			return nil
 		end
 		local itemdrop, magnitude = nil, math.huge
 		for i,v in next, collectionService:GetTagged('ItemDrop') do 
 			if v.Name == drop then 
-				local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or RenderStore.LocalPosition)
+				local localpos = (isAlive(lplr, true) and lplr.Character.HumanoidRootPart.Position or VoidwareStore.LocalPosition)
 				local newdistance = (localpos - v.Position).Magnitude 
 				if newdistance < magnitude then 
 					magnitude = newdistance 
@@ -12061,7 +12051,7 @@ runFunction(function()
 			return 
 		end
 		local success, response = pcall(function()
-			return httpService:JSONDecode(readfile('vape/Render/exploiters.json')) 
+			return httpService:JSONDecode(readfile('vape/Voidware/exploiters.json')) 
 		end)
 		if type(response) ~= 'table' then 
 			response = {}
@@ -12073,8 +12063,8 @@ runFunction(function()
 		else
 			response[player.Name] = {DisplayName = player.DisplayName, UserId = tostring(player.DisplayName), Detections = {detection}}
 		end
-		if isfolder('vape/Render') then 
-			writefile('vape/Render/exploiters.json', httpService:JSONEncode(response))
+		if isfolder('vape/Voidware') then 
+			writefile('vape/Voidware/exploiters.json', httpService:JSONEncode(response))
 		end
 	end
 	local detectionmethods = {
@@ -12101,8 +12091,8 @@ runFunction(function()
 							InfoNotification('HackerDetector', plr.DisplayName..' is using Teleport Exploit!', 100) 
 							table.insert(detectedusers.Teleport, plr)
 							cachedetection(plr, 'Teleport')
-							if RenderFunctions.playerTags[plr] == nil then 
-								RenderFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
+							if VoidwareFunctions.playerTags[plr] == nil then 
+								VoidwareFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
 							end
 						end 
 					end
@@ -12123,8 +12113,8 @@ runFunction(function()
 					local magnitude = (plr.Character.HumanoidRootPart.Position - oldpos).Magnitude
 					if (plr:GetAttribute('LastTeleported') - lastbwteleport) ~= 0 and magnitude >= ((distances[plr:GetAttribute('PlayingAsKit') or ''] or 25) + (playerRaycasted(plr, Vector3.new(0, -15, 0)) and 0 or 40)) then 
 						InfoNotification('HackerDetector', plr.DisplayName..' is using speed!', 60)
-						if RenderFunctions.playerTags[plr] == nil then 
-							RenderFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
+						if VoidwareFunctions.playerTags[plr] == nil then 
+							VoidwareFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
 						end
 					end
 					oldpos = plr.Character.HumanoidRootPart.Position
@@ -12136,13 +12126,13 @@ runFunction(function()
 		InfiniteFly = function(plr) 
 			repeat 
 				if isAlive(plr, true) then 
-					local magnitude = (RenderStore.LocalPosition - plr.Character.HumanoidRootPart.Position).Magnitude
-					if magnitude >= 10000 and playerRaycast(plr) == nil and playerRaycast({Character = {PrimaryPart = {Position = RenderStore.LocalPosition}}}) then 
+					local magnitude = (VoidwareStore.LocalPosition - plr.Character.HumanoidRootPart.Position).Magnitude
+					if magnitude >= 10000 and playerRaycast(plr) == nil and playerRaycast({Character = {PrimaryPart = {Position = VoidwareStore.LocalPosition}}}) then 
 						InfoNotification('HackerDetector', plr.DisplayName..' is using InfiniteFly!', 60) 
 						cachedetection(plr, 'InfiniteFly')
 						table.insert(detectedusers.InfiniteFly, plr)
-						if RenderFunctions.playerTags[plr] == nil then 
-							RenderFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
+						if VoidwareFunctions.playerTags[plr] == nil then 
+							VoidwareFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
 						end
 					end
 					task.wait(2.5)
@@ -12159,8 +12149,8 @@ runFunction(function()
 						InfoNotification('HackerDetector', plr.DisplayName..' is using Invisibility!', 60) 
 						table.insert(detectedusers.Invisibility, plr)
 						cachedetection(plr, 'Invisibility')
-						if RenderFunctions.playerTags[plr] == nil then 
-							RenderFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
+						if VoidwareFunctions.playerTags[plr] == nil then 
+							VoidwareFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
 						end
 					end
 				end
@@ -12176,8 +12166,8 @@ runFunction(function()
 					if plr.Name == name then 
 						InfoNotification('HackerDetector', plr.DisplayName..' is the owner of Godsploit! They\'re is most likely cheating.', 60) 
 						cachedetection(plr, 'Name')
-						if RenderFunctions.playerTags[plr] == nil then 
-							RenderFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
+						if VoidwareFunctions.playerTags[plr] == nil then 
+							VoidwareFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
 						end 
 					end
 				end
@@ -12194,13 +12184,13 @@ runFunction(function()
 		end, 
 		Cache = function(plr)
 			local success, response = pcall(function()
-				return httpService:JSONDecode(readfile('vape/Render/exploiters.json')) 
+				return httpService:JSONDecode(readfile('vape/Voidware/exploiters.json')) 
 			end) 
 			if type(response) == 'table' and response[plr.Name] then 
 				InfoNotification('HackerDetector', plr.DisplayName..' is cached on the exploiter database!', 30)
 				table.insert(detectedusers.Cached, plr)
-				if RenderFunctions.playerTags[plr] == nil then 
-					RenderFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
+				if VoidwareFunctions.playerTags[plr] == nil then 
+					VoidwareFunctions:CreatePlayerTag(plr, 'SCRIPT KIDDIE', 'FF0000') 
 				end
 			end
 		end
@@ -12260,7 +12250,7 @@ runFunction(function()
 	})
 	HackerDetectorFileCache = HackerDetector.CreateToggle({
 		Name = 'Cached detections',
-		HoverText = 'Writes (vape/Render/exploiters.json)\neverytime someone is detected.',
+		HoverText = 'Writes (vape/Voidware/exploiters.json)\neverytime someone is detected.',
 		Default = true,
 		Function = function() end
 	})
@@ -12268,7 +12258,7 @@ runFunction(function()
 		repeat 
 			if pastesploit == nil then 
 				task.spawn(function()
-					pcall(function() pastesploit = game:HttpGet('https://raw.githubusercontent.com/AlSploit/GodSploit/'..RenderFunctions:GithubHash('GodSploit', 'AlSploit')..'/MainScript') end)
+					pcall(function() pastesploit = game:HttpGet('https://raw.githubusercontent.com/AlSploit/GodSploit/'..VoidwareFunctions:GithubHash('GodSploit', 'AlSploit')..'/MainScript') end)
 				end)
 			end
 			task.wait(10) 
@@ -12404,7 +12394,7 @@ runFunction(function()
 	local orgI, mz, vz = 1, 5, 10
     local DamageIndicatorMode = {Value = 'Rainbow'}
 	local DamageIndicatorMode2 = {Value = 'Gradient'}
-	DamageIndicator = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	DamageIndicator = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'DamageIndicator',
 		Function = function(calling)
 			if calling then
@@ -12441,7 +12431,7 @@ runFunction(function()
 									elseif DamageIndicatorMode1.Value == 'Multiple' then
 										indicatorobj.Text = DamageMessages[math.random(orgI, #DamageMessages)]
 									else
-										indicatorobj.Text = DamageIndicatorCustom.Value or 'Render Intents on top!'
+										indicatorobj.Text = DamageIndicatorCustom.Value or 'Voidware on top!'
 									end
 								end
 								indicatorobj.Font = DamageIndicatorFontToggle.Enabled and Enum.Font[DamageIndicatorFont.Value] or indicatorobject.Font
@@ -12575,7 +12565,7 @@ runFunction(function()
 			updatefuncs[ViewmodelHighlight.Value](handle2, handle2:FindFirstChildWhichIsA('Highlight'))
 		end
 	end
-	ViewmodelMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	ViewmodelMods = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'ViewModelMods',
 		HoverText = 'Customize the first person\nviewmodel experience.',
 		Function = function(calling)
@@ -12892,7 +12882,7 @@ runFunction(function()
 						end
 					end
 					bedwarsStore.switchdelay += (ProjectileAuraDelay.Value * 0.2)
-					if RenderStore.ping > 1000 then 
+					if VoidwareStore.ping > 1000 then 
 						bedwarsStore.switchdelay += (bedwarsStore.switchdelay + 8)
 					end
 					task.wait(getItem('star') and 0 or killauraNearPlayer and 0.25 or ProjectileAuraDelay.Value + 0.15)
@@ -13011,7 +13001,7 @@ end)
 			if calling then 
 				repeat 
 					local allowed = (isEnabled('Lobby Check', 'Toggle') and bedwarsStore.matchState ~= 0 or not isEnabled('Lobby Check', 'Toggle'))
-					if tick() > confettiTick and bedwars.AbilityController:canUseAbility('PARTY_POPPER') and allowed and isAlive() and RenderStore.ping < 800 then 
+					if tick() > confettiTick and bedwars.AbilityController:canUseAbility('PARTY_POPPER') and allowed and isAlive() and VoidwareStore.ping < 800 then 
 						bedwars.AbilityController:useAbility('PARTY_POPPER')
 						confettiTick = tick() + (ConfettiDelay.Value / 15)
 					end
@@ -13041,7 +13031,7 @@ end)]]
 			if calling then 
 				repeat 
 					local allowed = (isEnabled('Lobby Check', 'Toggle') and bedwarsStore.matchState ~= 0 or not isEnabled('Lobby Check', 'Toggle'))
-					if tick() > breatheTick and allowed and isAlive() and RenderStore.ping < 800 then 
+					if tick() > breatheTick and allowed and isAlive() and VoidwareStore.ping < 800 then 
 						bedwars.ClientHandler:Get('DragonBreath'):SendToServer({player = lplr}) 
 						breatheTick = (tick() + ((DragonBreatheDelay.Value / 15) + 1))
 					end
@@ -13071,7 +13061,7 @@ end)]]
 			if calling then 
 				repeat 
 					local allowed = (isEnabled('Lobby Check', 'Toggle') and bedwarsStore.matchState ~= 0 or not isEnabled('Lobby Check', 'Toggle'))
-					if tick() > TerraTick and bedwars.AbilityController:canUseAbility('BLOCK_KICK') and allowed and isAlive() and RenderStore.ping < 800 and not isEnabled('BedTP') then 
+					if tick() > TerraTick and bedwars.AbilityController:canUseAbility('BLOCK_KICK') and allowed and isAlive() and VoidwareStore.ping < 800 and not isEnabled('BedTP') then 
 						bedwars.AbilityController:useAbility('BLOCK_KICK')
 						TerraTick = tick() + (TerraDelay.Value / 15)
 					end
@@ -13150,7 +13140,7 @@ runLunar(function()
 		Function = function(callback)
 			if callback then
 				repeat 
-					if tick() >= remotedelay and RenderStore.ping < 600 then 
+					if tick() >= remotedelay and VoidwareStore.ping < 600 then 
 						if RemotesConnectParty.Enabled and bedwars.AbilityController:canUseAbility('PARTY_POPPER') then 
 							bedwars.AbilityController:useAbility('PARTY_POPPER') 
 						end
@@ -13199,7 +13189,7 @@ end)
 
 runLunar(function()
 	local NoKillFeed = {}
-	NoKillFeed = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	NoKillFeed = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'NoKillFeed',
         HoverText = 'Removes the Kill Feed',
 		Function = function(callback)
@@ -13441,9 +13431,9 @@ pcall(function()
 		end
 	end
 
-	texturepack = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	texturepack = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
         Name = "TexturePack",
-        HoverText = "Modifies your renderer",
+        HoverText = "Modifies your voidwar",
         Function = function(callback)
             if callback then
 				if gameCamera.Viewmodel:FindFirstChildWhichIsA("Accessory") then refreshViewmodel(gameCamera.Viewmodel:FindFirstChildWhichIsA("Accessory")) end
@@ -13475,7 +13465,7 @@ runLunar(function()
 	}
 	local CloudTransparency = {Value = 0}
 	local CustomCloudsNeon = {}
-	CustomClouds = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	CustomClouds = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = "CustomClouds",
         HoverText = "Customizes the clouds",
 		Function = function(callback)
@@ -13759,7 +13749,7 @@ end)
 
 runFunction(function()
 	local performed = false
-	GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = "UICleanup",
 		Function = function(callback)
 			if callback and not performed then 

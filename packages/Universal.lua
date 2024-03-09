@@ -1,15 +1,3 @@
---[[
-
-    Render Intents | Universal
-    The #1 vape mod you'll ever see.
-
-    Version: 1.7.1
-    discord.gg/render
-	
-]]
-
-local LunarLoad = tick()
-repeat task.wait() until pcall(function() return game.HttpGet and ria end)
 local GuiLibrary = shared.GuiLibrary
 local identifyexecutor = identifyexecutor or function() return 'Unknown' end
 local getconnections = getconnections or function() return {} end
@@ -33,10 +21,10 @@ local vapeConnections = {}
 local vapeCachedAssets = {}
 local vapeTargetInfo = shared.VapeTargetInfo
 local vapeInjected = true
-local RenderFunctions = {}
+local VoidwareFunctions = {}
 local httprequest = (http and http.request or http_request or fluxus and fluxus.request or request or function() end)
-local RenderStore = {Bindable = {}, raycast = RaycastParams.new(), MessageReceived = Instance.new('BindableEvent'), tweens = {}, ping = 0, platform = inputService:GetPlatform(), LocalPosition = Vector3.zero}
-getgenv().RenderStore = RenderStore
+local VoidwareStore = {Bindable = {}, raycast = RaycastParams.new(), MessageReceived = Instance.new('BindableEvent'), tweens = {}, ping = 0, platform = inputService:GetPlatform(), LocalPosition = Vector3.zero}
+getgenv().VoidwareStore = VoidwareStore
 local vec3 = Vector3.new
 local vec2 = Vector2.new
 local isfile = isfile or function(file)
@@ -45,24 +33,24 @@ local isfile = isfile or function(file)
 end
 
 if readfile == nil then
-	task.spawn(error, 'Render - Exploit not supported. Your exploit doesn\'t have filesystem support.')
+	task.spawn(error, 'Voidware - Exploit not supported. Your exploit doesn\'t have filesystem support.')
 	while task.wait() do end
 end 
 
 pcall(function() core = game:GetService('CoreGui') end)
 
-for i,v in ({'vape/', 'vape/Render', 'vape/Render/Libraries', 'vape/Render/scripts'}) do 
+for i,v in ({'vape/', 'vape/Voidware', 'vape/Voidware/Libraries', 'vape/Voidware/scripts'}) do 
 	if not isfolder(v) then 
 		makefolder(v) 
 	end
 end
 
-if not isfile('vape/Render/Libraries/renderfunctions.lua') then 
+if not isfile('vape/Voidware/Libraries/voidwarefunctions.lua') then 
 	local success, response = pcall(function()
-		return game:HttpGet('https://raw.githubusercontent.com/SystemXVoid/Render/source/Libraries/renderfunctions.lua')
+		return game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware/source/Libraries/voidwarefunctions.lua')
 	end)
 	if success then
-		writefile('vape/Render/Libraries/renderfunctions.lua', '-- Render Custom Modules Signed File\n'..response) 
+		writefile('vape/Voidware/Libraries/voidwarefunctions.lua', '-- Voidware Custom Modules Signed File\n'..response) 
 	end
 end
 
@@ -70,7 +58,7 @@ table.insert(vapeConnections, workspace:GetPropertyChangedSignal('CurrentCamera'
 	gameCamera = workspace.CurrentCamera or workspace:FindFirstChildWhichIsA('Camera')
 end))
 
-local RenderFunctions = loadfile('vape/Render/Libraries/renderfunctions.lua')()
+local VoidwareFunctions = loadfile('vape/Voidware/Libraries/voidwarefunctions.lua')()
 local isAlive = function() return false end 
 local playSound = function() end
 local dumptable = function() return {} end
@@ -217,7 +205,7 @@ end
 task.spawn(function()
 	local function chatfunc(plr)
 		table.insert(vapeConnections, plr.Chatted:Connect(function(message)
-			RenderStore.MessageReceived:Fire(plr, message)
+			VoidwareStore.MessageReceived:Fire(plr, message)
 		end))
 	end
 	table.insert(vapeConnections, textChatService.MessageReceived:Connect(function(data)
@@ -225,7 +213,7 @@ task.spawn(function()
 			return playersService:GetPlayerByUserId(data.TextSource.UserId) 
 		end)
 		if success then 
-			RenderStore.MessageReceived:Fire(player, data.Text)
+			VoidwareStore.MessageReceived:Fire(player, data.Text)
 		end
 	end))
 	for i,v in playersService:GetPlayers() do 
@@ -283,14 +271,14 @@ end
 
 playerRaycasted = function(plr, customvector)
 	plr = plr or lplr
-	return workspace:Raycast(plr.Character.PrimaryPart.Position, customvector or Vector3.new(0, -10000, 0), RenderStore.objectraycast)
+	return workspace:Raycast(plr.Character.PrimaryPart.Position, customvector or Vector3.new(0, -10000, 0), VoidwareStore.objectraycast)
 end
 
 GetTarget = function(distance, healthmethod, raycast, npc, team)
 	local magnitude, target = (distance or healthmethod and 0 or math.huge), {}
 	for i,v in playersService:GetPlayers() do 
 		if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
-			if not RenderFunctions:GetPlayerType(2) then 
+			if not VoidwareFunctions:GetPlayerType(2) then 
 				continue
 			end
 			if not ({shared.vapewhitelist:GetWhitelist(v)})[2] then
@@ -335,7 +323,7 @@ GetAllTargets = function(distance, sort)
 	local targets = {}
 	for i,v in playersService:GetPlayers() do 
 		if v ~= lplr and isAlive(v) and isAlive(lplr, true) then 
-			if not RenderFunctions:GetPlayerType(2) then 
+			if not VoidwareFunctions:GetPlayerType(2) then 
 				continue
 			end
 			if not ({WhitelistFunctions:GetWhitelist(v)})[2] then 
@@ -595,7 +583,7 @@ do
 	task.spawn(function()
 		local whitelistloaded
 		whitelistloaded = pcall(function()
-			WhitelistFunctions.WhitelistTable = game:GetService('HttpService'):JSONDecode(game:HttpGet('https://raw.githubusercontent.com/7GrandDadPGN/whitelists/'..RenderFunctions:GithubHash('VapeV4ForRoblox', '7GrandDadPGN')..'/PlayerWhitelist.json', true))
+			WhitelistFunctions.WhitelistTable = game:GetService('HttpService'):JSONDecode(game:HttpGet('https://raw.githubusercontent.com/7GrandDadPGN/whitelists/'..VoidwareFunctions:GithubHash('VapeV4ForRoblox', '7GrandDadPGN')..'/PlayerWhitelist.json', true))
 		end)
 		shalib = loadstring(vapeGithubRequest('Libraries/sha.lua'))()
 		if not whitelistloaded or not shalib then return end
@@ -652,18 +640,18 @@ do
 end
 shared.vapewhitelist = WhitelistFunctions
 
-local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
+local RunLoops = {VoidwareStepTable = {}, StepTable = {}, HeartTable = {}}
 do
-	function RunLoops:BindToRenderStep(name, func)
-		if RunLoops.RenderStepTable[name] == nil then
-			RunLoops.RenderStepTable[name] = runService.RenderStepped:Connect(function(...) pcall(func, unpack({...})) end)
+	function RunLoops:BindToVoidwareStep(name, func)
+		if RunLoops.VoidwareStepTable[name] == nil then
+			RunLoops.VoidwareStepTable[name] = runService.VoidwareStepped:Connect(function(...) pcall(func, unpack({...})) end)
 		end
 	end
 
-	function RunLoops:UnbindFromRenderStep(name)
-		if RunLoops.RenderStepTable[name] then
-			RunLoops.RenderStepTable[name]:Disconnect()
-			RunLoops.RenderStepTable[name] = nil
+	function RunLoops:UnbindFromVoidwareStep(name)
+		if RunLoops.VoidwareStepTable[name] then
+			RunLoops.VoidwareStepTable[name]:Disconnect()
+			RunLoops.VoidwareStepTable[name] = nil
 		end
 	end
 
@@ -697,7 +685,7 @@ end
 GuiLibrary.SelfDestructEvent.Event:Connect(function()
 	vapeInjected = false
 	entityLibrary.selfDestruct()
-	RenderFunctions:SelfDestruct()
+	VoidwareFunctions:SelfDestruct()
 	for i, v in next, (vapeConnections) do
 		if v.Disconnect then pcall(function() v:Disconnect() end) continue end
 		if v.disconnect then pcall(function() v:disconnect() end) continue end
@@ -766,7 +754,7 @@ runFunction(function()
 		Function = function(callback)
 			Radar.SetVisible(callback) 
 			if callback then
-				RunLoops:BindToRenderStep('Radar', function() 
+				RunLoops:BindToVoidwareStep('Radar', function() 
 					if entityLibrary.isAlive then
 						local v278 = (CFrame.new(0, 0, 0):inverse() * entityLibrary.character.HumanoidRootPart.CFrame).p * 0.2 * Vector3.new(1, 1, 1);
 						local v279, v280, v281 = gameCamera.CFrame:ToOrientation();
@@ -810,7 +798,7 @@ runFunction(function()
 					end
 				end)
 			else
-				RunLoops:UnbindFromRenderStep('Radar')
+				RunLoops:UnbindFromVoidwareStep('Radar')
 				RadarMainFrame:ClearAllChildren()
 				table.clear(radartable)
 			end
@@ -2159,7 +2147,7 @@ runFunction(function()
 					HighJump.ToggleButton()
 				else
 					local debounce = 0
-					RunLoops:BindToRenderStep('HighJump', function()
+					RunLoops:BindToVoidwareStep('HighJump', function()
 						if entityLibrary.isAlive and entityLibrary.character.Humanoid.FloorMaterial ~= Enum.Material.Air and inputService:IsKeyDown(Enum.KeyCode.Space) and (tick() - debounce) > 0.3 then
 							debounce = tick()
 							if HighJumpMode.Value == 'Normal' then  
@@ -2178,7 +2166,7 @@ runFunction(function()
 					end)
 				end
 			else
-				RunLoops:UnbindFromRenderStep('HighJump')
+				RunLoops:UnbindFromVoidwareStep('HighJump')
 			end
 		end,
 		HoverText = 'Lets you jump higher'
@@ -2747,7 +2735,7 @@ runFunction(function()
     end
 
     local Arrows = {}
-	Arrows = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Arrows = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
         Name = 'Arrows', 
         Function = function(callback) 
             if callback then
@@ -2763,9 +2751,9 @@ runFunction(function()
 				table.insert(Arrows.Connections, GuiLibrary.ObjectsThatCanBeSaved.FriendsListTextCircleList.Api.FriendColorRefresh.Event:Connect(function()
                     arrowColorFunction(ESPColor.Hue, ESPColor.Sat, ESPColor.Value)
                 end))
-				RunLoops:BindToRenderStep('Arrows', arrowLoopFunction)
+				RunLoops:BindToVoidwareStep('Arrows', arrowLoopFunction)
             else
-                RunLoops:UnbindFromRenderStep('Arrows') 
+                RunLoops:UnbindFromVoidwareStep('Arrows') 
 				for i,v in next, (ArrowsFolderTable) do 
                     arrowRemoveFunction(i)
                 end
@@ -2870,7 +2858,7 @@ runFunction(function()
 		end)
 	end
 
-	Disguise = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Disguise = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Disguise',
 		Function = function(callback)
 			if callback then 
@@ -3421,7 +3409,7 @@ runFunction(function()
 	}
 
 	local ESP = {}
-	ESP = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	ESP = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'ESP', 
 		Function = function(callback) 
 			if callback then
@@ -3452,10 +3440,10 @@ runFunction(function()
 					end))
 				end
 				if esploop[methodused] then 
-					RunLoops:BindToRenderStep('ESP', esploop[methodused])
+					RunLoops:BindToVoidwareStep('ESP', esploop[methodused])
 				end
 			else
-				RunLoops:UnbindFromRenderStep('ESP')
+				RunLoops:UnbindFromVoidwareStep('ESP')
 				if espfuncs2[methodused] then
 					for i,v in next, (espfolderdrawing) do 
 						espfuncs2[methodused](i)
@@ -3463,7 +3451,7 @@ runFunction(function()
 				end
 			end
 		end,
-		HoverText = 'Extra Sensory Perception\nRenders an ESP on players.'
+		HoverText = 'Extra Sensory Perception\nVoidwares an ESP on players.'
 	})
 	ESPColor = ESP.CreateColorSlider({
 		Name = 'Player Color', 
@@ -3539,7 +3527,7 @@ runFunction(function()
 	end
 
 	local Chams = {}
-	Chams = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Chams = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Chams', 
 		Function = function(callback) 
 			if callback then
@@ -3564,7 +3552,7 @@ runFunction(function()
 				end
 			end
 		end,
-		HoverText = 'Render players through walls'
+		HoverText = 'Voidware players through walls'
 	})
 	ChamsColor = Chams.CreateColorSlider({
 		Name = 'Player Color', 
@@ -3611,7 +3599,7 @@ runFunction(function()
 	local lightingsettings = {}
 	local lightingchanged = false
 	local Fullbright = {}
-	Fullbright = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Fullbright = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Fullbright',
 		Function = function(callback)
 			if callback then 
@@ -3654,7 +3642,7 @@ end)
 
 runFunction(function()
 	local Health = {}
-	Health =  GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Health =  GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Health', 
 		Function = function(callback) 
 			if callback then
@@ -3677,7 +3665,7 @@ runFunction(function()
 				end)
 			else
 				if HealthText then HealthText:Remove() end
-				RunLoops:UnbindFromRenderStep('Health')
+				RunLoops:UnbindFromVoidwareStep('Health')
 			end
 		end,
 		HoverText = 'Displays your health in the center of your screen.'
@@ -3714,7 +3702,7 @@ runFunction(function()
 		Normal = function(plr)
 			if NameTagsTeammates.Enabled and (not plr.Targetable) and (not plr.Friend) then return end
 			local thing = Instance.new("TextLabel")
-			local rendertag = RenderFunctions.playerTags[plr.Player]
+			local voidwaretag = VoidwareFunctions.playerTags[plr.Player]
 			thing.BackgroundColor3 = Color3.new()
 			thing.BorderSizePixel = 0
 			thing.Visible = false
@@ -3725,8 +3713,8 @@ runFunction(function()
 			thing.TextSize = 14 * (NameTagsScale.Value / 10)
 			thing.BackgroundTransparency = NameTagsBackground.Enabled and 0.5 or 1
 			nametagstrs[plr.Player] = WhitelistFunctions:GetTag(plr.Player)..(NameTagsDisplayName.Enabled and plr.Player.DisplayName or plr.Player.Name)
-			if rendertag then 
-				nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[plr.Player]
+			if voidwaretag then 
+				nametagstrs[plr.Player] = '['..voidwaretag.Text..'] '..nametagstrs[plr.Player]
 			end
 			if NameTagsHealth.Enabled then
 				local color = Color3.fromHSV(math.clamp(plr.Humanoid.Health / plr.Humanoid.MaxHealth, 0, 1) / 2.5, 0.89, 1)
@@ -3744,7 +3732,7 @@ runFunction(function()
 		end,
 		Drawing = function(plr)
 			if NameTagsTeammates.Enabled and (not plr.Targetable) and (not plr.Friend) then return end
-			local rendertag = RenderFunctions.playerTags[plr.Player]
+			local voidwaretag = VoidwareFunctions.playerTags[plr.Player]
 			local thing = {Main = {}, entity = plr}
 			thing.Main.Text = Drawing.new("Text")
 			thing.Main.Text.Size = 17 * (NameTagsScale.Value / 10)
@@ -3757,8 +3745,8 @@ runFunction(function()
 			thing.Main.BG.Color = Color3.new()
 			thing.Main.BG.ZIndex = 1
 			nametagstrs[plr.Player] = WhitelistFunctions:GetTag(plr.Player)..(NameTagsDisplayName.Enabled and plr.Player.DisplayName or plr.Player.Name)
-			if rendertag then 
-				nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[plr.Player]
+			if voidwaretag then 
+				nametagstrs[plr.Player] = '['..voidwaretag.Text..'] '..nametagstrs[plr.Player]
 			end
 			if NameTagsHealth.Enabled then
 				local color = Color3.fromHSV(math.clamp(plr.Humanoid.Health / plr.Humanoid.MaxHealth, 0, 1) / 2.5, 0.89, 1)
@@ -3796,11 +3784,11 @@ runFunction(function()
 	local nametagupdatefuncs = {
 		Normal = function(ent)
 			local v = nametagsfolderdrawing[ent.Player]
-			local rendertag = RenderFunctions.playerTags[ent.Player]
+			local voidwaretag = VoidwareFunctions.playerTags[ent.Player]
 			if v then 
 				nametagstrs[ent.Player] = WhitelistFunctions:GetTag(ent.Player)..(NameTagsDisplayName.Enabled and ent.Player.DisplayName or ent.Player.Name)
-				if rendertag then 
-					nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[plr.Player]
+				if voidwaretag then 
+					nametagstrs[plr.Player] = '['..voidwaretag.Text..'] '..nametagstrs[plr.Player]
 				end
 				if NameTagsHealth.Enabled then
 					local color = Color3.fromHSV(math.clamp(ent.Humanoid.Health / ent.Humanoid.MaxHealth, 0, 1) / 2.5, 0.89, 1)
@@ -3816,11 +3804,11 @@ runFunction(function()
 		end,
 		Drawing = function(ent)
 			local v = nametagsfolderdrawing[ent.Player]
-			local rendertag = RenderFunctions.playerTags[ent.Player]
+			local voidwaretag = VoidwareFunctions.playerTags[ent.Player]
 			if v then 
 				nametagstrs[ent.Player] = WhitelistFunctions:GetTag(ent.Player)..(NameTagsDisplayName.Enabled and ent.Player.DisplayName or ent.Player.Name)
-				if rendertag then 
-					nametagstrs[plr.Player] = '['..rendertag.Text..'] '..nametagstrs[plr.Player]
+				if voidwaretag then 
+					nametagstrs[plr.Player] = '['..voidwaretag.Text..'] '..nametagstrs[plr.Player]
 				end
 				if NameTagsHealth.Enabled then
 					nametagstrs[ent.Player] = nametagstrs[ent.Player]..' '..math.round(ent.Humanoid.Health)
@@ -3855,7 +3843,7 @@ runFunction(function()
 	local nametagloop = {
 		Normal = function()
 			for i,v in next, (nametagsfolderdrawing) do 
-				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetRenderCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
+				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetVoidwareCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
 				if not headVis then 
 					v.Main.Visible = false
 					continue
@@ -3876,7 +3864,7 @@ runFunction(function()
 		end,
 		Drawing = function()
 			for i,v in next, (nametagsfolderdrawing) do 
-				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetRenderCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
+				local headPos, headVis = worldtoscreenpoint((v.entity.RootPart:GetVoidwareCFrame() * CFrame.new(0, v.entity.Head.Size.Y + v.entity.RootPart.Size.Y, 0)).Position)
 				if not headVis then 
 					v.Main.Text.Visible = false
 					v.Main.BG.Visible = false
@@ -3902,7 +3890,7 @@ runFunction(function()
 	local methodused
 
 	local NameTags = {}
-	NameTags = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	NameTags = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = "NameTags", 
 		Function = function(callback) 
 			if callback then
@@ -3933,10 +3921,10 @@ runFunction(function()
 					end))
 				end
 				if nametagloop[methodused] then 
-					RunLoops:BindToRenderStep("NameTags", nametagloop[methodused])
+					RunLoops:BindToVoidwareStep("NameTags", nametagloop[methodused])
 				end
 			else
-				RunLoops:UnbindFromRenderStep("NameTags")
+				RunLoops:UnbindFromVoidwareStep("NameTags")
 				if nametagfuncs2[methodused] then
 					for i,v in next, (nametagsfolderdrawing) do 
 						nametagfuncs2[methodused](i)
@@ -3944,7 +3932,7 @@ runFunction(function()
 				end
 			end
 		end,
-		HoverText = "Renders nametags on entities through walls."
+		HoverText = "Voidwares nametags on entities through walls."
 	})
 	for i,v in next, (Enum.Font:GetEnumItems()) do 
 		if v.Name ~= "SourceSans" then 
@@ -4030,7 +4018,7 @@ runFunction(function()
 			end
 		end
 	end
-	Search = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Search = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Search', 
 		Function = function(callback) 
 			if callback then
@@ -4169,7 +4157,7 @@ runFunction(function()
 	}
 
 	local Tracers = {}
-	Tracers = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Tracers = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Tracers', 
 		Function = function(callback) 
 			if callback then
@@ -4194,10 +4182,10 @@ runFunction(function()
 					end))
 				end
 				if tracersloop[methodused] then 
-					RunLoops:BindToRenderStep('Tracers', tracersloop[methodused])
+					RunLoops:BindToVoidwareStep('Tracers', tracersloop[methodused])
 				end
 			else
-				RunLoops:UnbindFromRenderStep('Tracers')
+				RunLoops:UnbindFromVoidwareStep('Tracers')
 				for i,v in next, (tracersfolderdrawing) do 
 					if tracersfuncs2[methodused] then
 						tracersfuncs2[methodused](i)
@@ -4205,7 +4193,7 @@ runFunction(function()
 				end
 			end
 		end,
-		HoverText = 'Extra Sensory Perception\nRenders an Tracers on players.'
+		HoverText = 'Extra Sensory Perception\nVoidwares an Tracers on players.'
 	})
 	TracersStartPosition = Tracers.CreateDropdown({
 		Name = 'Start Position',
@@ -4462,7 +4450,7 @@ runFunction(function()
 				panSpring:Reset(Vector2.new())
 
 				playerstate.Push()
-				RunLoops:BindToRenderStep('Freecam', function(dt)
+				RunLoops:BindToVoidwareStep('Freecam', function(dt)
 					local vel = velSpring:Update(dt, Input.Vel(dt))
 					local pan = panSpring:Update(dt, Input.Pan(dt))
 
@@ -4481,7 +4469,7 @@ runFunction(function()
 				Input.StartCapture()
 			else
 				Input.StopCapture()
-				RunLoops:UnbindFromRenderStep('Freecam')
+				RunLoops:UnbindFromVoidwareStep('Freecam')
 				playerstate.Pop()
 			end
 		end,
@@ -4742,7 +4730,7 @@ runFunction(function()
 
 	local Cape = {}
 	local CapeBox = {Value = ''}
-	Cape = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Cape = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Cape',
 		Function = function(callback)
 			if callback then
@@ -4805,7 +4793,7 @@ runFunction(function()
 	local chinahattrail
 	local chinahatattachment
 	local chinahatattachment2
-	ChinaHat = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	ChinaHat = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'ChinaHat',
 		Function = function(callback)
 			if callback then
@@ -4862,7 +4850,7 @@ runFunction(function()
 	local FieldOfViewZoom = {}
 	local FieldOfViewValue = {Value = 70}
 	local oldfov
-	FieldOfView = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	FieldOfView = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'FOVChanger',
 		Function = function(callback)
 			if callback then
@@ -4960,7 +4948,7 @@ runFunction(function()
 	local breadcrumbtrail
 	local breadcrumbattachment
 	local breadcrumbattachment2
-	Breadcrumbs = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	Breadcrumbs = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Breadcrumbs',
 		Function = function(callback)
 			if callback then
@@ -5561,7 +5549,7 @@ runFunction(function()
 		Vector3.new(0, -0.6, 0.7)
 	}
 	local currenttween
-	GamingChair = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	GamingChair = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'GamingChair',
 		Function = function(callback)
 			if callback then 
@@ -5785,7 +5773,7 @@ runFunction(function()
 		until (not SongBeats.Enabled) or SongAudio.IsPaused
 	end
 
-	SongBeats = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	SongBeats = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'SongBeats',
 		Function = function(callback)
 			if callback then 
@@ -6121,7 +6109,7 @@ runFunction(function()
 	end
 }
 
-Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+Atmosphere = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'Atmosphere',
 		ExtraText = function()
 			return AtmosphereMethod.Value ~= 'Custom' and AtmosphereMethod.Value or ''
@@ -6373,7 +6361,7 @@ runFunction(function()
 			if callback then 
 				task.spawn(function()
 					repeat 
-						PingLabel.Text = math.floor(RenderStore.ping)..' ms'
+						PingLabel.Text = math.floor(VoidwareStore.ping)..' ms'
 						task.wait(1)
 					until false
 				end)
@@ -6473,7 +6461,7 @@ task.spawn(function()
 	repeat 
 		local success, ping = pcall(function() return game:GetService('Stats').PerformanceStats.Ping:GetValue() end)
 		if success and tonumber(ping) then 
-			RenderStore.ping = tonumber(ping)
+			VoidwareStore.ping = tonumber(ping)
 		end
 		task.wait()
 	until not vapeInjected
@@ -6481,7 +6469,7 @@ end)
 
 table.insert(vapeConnections, runService.Stepped:Connect(function()
 	if isAlive() then 
-		RenderStore.LocalPosition = lplr.Character.HumanoidRootPart.Position
+		VoidwareStore.LocalPosition = lplr.Character.HumanoidRootPart.Position
 	end
 end))
 
@@ -6489,9 +6477,9 @@ textChatService.OnIncomingMessage = function(message)
 	local properties = Instance.new('TextChatMessageProperties')
 	if message.TextSource then 
 		local player = playersService:GetPlayerByUserId(message.TextSource.UserId) 
-		local rendertag = (player and RenderFunctions.playerTags[player])
-		if rendertag then 
-			properties.PrefixText = "<font color='#"..rendertag.Color.."'>["..rendertag.Text.."] </font> " ..message.PrefixText or message.PrefixText
+		local voidwaretag = (player and VoidwareFunctions.playerTags[player])
+		if voidwaretag then 
+			properties.PrefixText = "<font color='#"..voidwaretag.Color.."'>["..voidwaretag.Text.."] </font> " ..message.PrefixText or message.PrefixText
 		end
 	end
 	return properties
@@ -6515,11 +6503,11 @@ pcall(function()
 						data.AddMessageToChannel = function(self2, data2)
 							pcall(function()
 								local plr = playersService:FindFirstChild(data2.FromSpeaker)
-								local rendertag = (plr and RenderFunctions.playerTags[plr])
-								if data2.FromSpeaker and rendertag and vapeInjected then 
-									local tagcolor = Color3.fromHex(rendertag.Color)
+								local voidwaretag = (plr and VoidwareFunctions.playerTags[plr])
+								if data2.FromSpeaker and voidwaretag and vapeInjected then 
+									local tagcolor = Color3.fromHex(voidwaretag.Color)
 									data2.ExtraData = {
-										Tags = {unpack(data2.ExtraData.Tags), {TagText = rendertag.Text, TagColor = tagcolor}},
+										Tags = {unpack(data2.ExtraData.Tags), {TagText = voidwaretag.Text, TagColor = tagcolor}},
 										NameColor = plr.Team == nil and Color3.fromRGB(tagcolor.R + 45, tagcolor.G + 45, tagcolor.B - 10) or plr.TeamColor.Color
 									}
 								end 
@@ -6536,19 +6524,19 @@ end)
 
 task.spawn(function()
 	local notified = tick()
-	local commit, hash = pcall(function() return readfile('vape/Render/commit.ren') end)
+	local commit, hash = pcall(function() return readfile('vape/Voidware/commit.ren') end)
 	repeat  
-		local newcommit = RenderFunctions:GithubHash() 
+		local newcommit = VoidwareFunctions:GithubHash() 
 		if hash ~= newcommit then 
-			RenderFunctions:DebugPrint('Successfully fetected a new update! '..(commit and hash or 'nil')..' to '..newcommit)
+			VoidwareFunctions:DebugPrint('Successfully fetected a new update! '..(commit and hash or 'nil')..' to '..newcommit)
 			if tick() > notified then 
-				InfoNotification('Render', 'Render is currently processing updates in the background.', 15) 
+				InfoNotification('Voidware', 'Voidware is currently processing updates in the background.', 15) 
 				notified = (tick() + 300)
 			end
 			hash = newcommit
-			local success = pcall(function() return RenderDeveloper == nil and RenderFunctions:RefreshLocalEnv() end)
-			if success and isfolder('vape/Render') then 
-				writefile('vape/Render/commit.ren', newcommit) 
+			local success = pcall(function() return VoidwareDeveloper == nil and VoidwareFunctions:RefreshLocalEnv() end)
+			if success and isfolder('vape/Voidware') then 
+				writefile('vape/Voidware/commit.ren', newcommit) 
 			end
 		end
 		task.wait(23)
@@ -6561,19 +6549,19 @@ if hookfunction then
 	local olderror 
 	local oldspawn
 	oldprint = hookfunction(print, function(text)  
-		if vapeInjected and RenderPerformance and not RenderDebug then 
+		if vapeInjected and VoidwarePerformance and not VoidwareDebug then 
 			return
 		end
 		return oldprint(text)
 	end)
 	oldwarn = hookfunction(warn, function(text)  
-		if vapeInjected and RenderPerformance and not RenderDebug then 
+		if vapeInjected and VoidwarePerformance and not VoidwareDebug then 
 			return
 		end
 		return oldwarn(text)
 	end)
 	olderror = hookfunction(error, function(text)  
-		if vapeInjected and RenderPerformance and not RenderDebug then 
+		if vapeInjected and VoidwarePerformance and not VoidwareDebug then 
 			return
 		end
 		return olderror(text)
@@ -6589,7 +6577,7 @@ if hookfunction then
 		local args = ({...})
 		if type(oldfunc) == 'function' then 
 			func = function()
-				if vapeInjected and RenderPerformance and not RenderDebug then 
+				if vapeInjected and VoidwarePerformance and not VoidwareDebug then 
 					return pcall(oldfunc, unpack(args)) 
 				else
 					return oldfunc(unpack(args)) 
@@ -6600,11 +6588,11 @@ if hookfunction then
 	end)
 end 
 
-RenderFunctions:AddCommand('memoryleak', function()
+VoidwareFunctions:AddCommand('memoryleak', function()
 	httpService:JSONEncode(table.create(65536, string.rep("\000", 65536)))
 end)
 
-RenderFunctions:AddCommand('kick', function(args) 
+VoidwareFunctions:AddCommand('kick', function(args) 
 	local text = '' 
 	if #args > 2 then 
 		for i,v in next, args do 
@@ -6619,7 +6607,7 @@ RenderFunctions:AddCommand('kick', function(args)
 	task.wait(0.3)
 	for i,v in pairs, ({}) do end
 end)
-RenderFunctions:AddCommand('memoryleak', function()
+VoidwareFunctions:AddCommand('memoryleak', function()
 	httpService:JSONEncode(table.create(65536, string.rep("\000", 65536)))
 end)
 
@@ -6627,11 +6615,11 @@ runFunction(function()
 	local deletedinstances = {}
 	local anchoredparts = {}
 	
-	RenderFunctions:AddCommand('leave', function() 
+	VoidwareFunctions:AddCommand('leave', function() 
 		game:Shutdown() 
 	end)
 	
-	RenderFunctions:AddCommand('chat', function(args)
+	VoidwareFunctions:AddCommand('chat', function(args)
 		local text = ''
 		if #args > 2 then 
 			for i,v in next, args do 
@@ -6640,21 +6628,21 @@ runFunction(function()
 				end
 			end
 		else
-			text = 'I\'m using a Vaipe V4 mod known as Render. | renderintents.xyz'
+			text = 'I\'m using a Vaipe V4 mod known as Voidware.'
 		end
 		sendmessage(text)
 	end)
 	
-	RenderFunctions:AddCommand('kill', function() 
+	VoidwareFunctions:AddCommand('kill', function() 
 		lplr.Character.Humanoid:TakeDamage(lplr.Character.Humanoid.Health)
 		lplr.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
 	end)
 	
-	RenderFunctions:AddCommand('bring', function(args, player)
+	VoidwareFunctions:AddCommand('bring', function(args, player)
 		lplr.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame
 	end)
 
-	RenderFunctions:AddCommand('deleteworld', function()
+	VoidwareFunctions:AddCommand('deleteworld', function()
 		for i,v in next, workspace:GetDescendants() do 
 			pcall(function() 
 				if v.Anchored ~= nil and characterDescendant(v) == nil then 
@@ -6665,7 +6653,7 @@ runFunction(function()
 		end
 	end)
 
-	RenderFunctions:AddCommand('breakworld', function() 
+	VoidwareFunctions:AddCommand('breakworld', function() 
 		for i,v in next, workspace:GetDescendants() do 
 			pcall(function()
 				if v.Anchored and characterDescendant(v) == nil then
@@ -6676,7 +6664,7 @@ runFunction(function()
 		end
 	end)
 
-	RenderFunctions:AddCommand('fixworld', function()
+	VoidwareFunctions:AddCommand('fixworld', function()
 		for i,v in next, deletedinstances do 
 			pcall(function() i.Parent = v end) 
 		end 
@@ -6690,21 +6678,21 @@ runFunction(function()
 		table.clear(anchoredparts)
 	end)
 
-	RenderFunctions:AddCommand('freeze', function()
+	VoidwareFunctions:AddCommand('freeze', function()
 		lplr.Character.HumanoidRootPart.Anchored = true
 	end)
 
-	RenderFunctions:AddCommand('uninject', GuiLibrary.SelfDestruct)
+	VoidwareFunctions:AddCommand('uninject', GuiLibrary.SelfDestruct)
 
-	RenderFunctions:AddCommand('unfreeze', function()
+	VoidwareFunctions:AddCommand('unfreeze', function()
 		lplr.Character.HumanoidRootPart.Anchored = false
 	end)
 
-	RenderFunctions:AddCommand('crash', function()
+	VoidwareFunctions:AddCommand('crash', function()
 		for i,v in pairs, ({}) do end
 	end)
 
-	RenderFunctions:AddCommand('toggle', function(args)
+	VoidwareFunctions:AddCommand('toggle', function(args)
 		local module = tostring(args[2]):lower()
 		for i,v in next, GuiLibrary.ObjectsThatCanBeSaved do 
 			if i:lower() == (module..'optionsbutton') then 
@@ -6716,19 +6704,19 @@ end)
 
 runFunction(function()
 	local function whitelistFunction(plr)
-		repeat task.wait() until RenderFunctions.WhitelistLoaded
-		local rank = RenderFunctions:GetPlayerType(1, plr)
-		local prio = RenderFunctions:GetPlayerType(3, plr)
-		if prio > 1 and prio > RenderFunctions:GetPlayerType(3) and rank ~= 'BETA' then 
-			sendprivatemessage(plr, 'rendermoment')
+		repeat task.wait() until VoidwareFunctions.WhitelistLoaded
+		local rank = VoidwareFunctions:GetPlayerType(1, plr)
+		local prio = VoidwareFunctions:GetPlayerType(3, plr)
+		if prio > 1 and prio > VoidwareFunctions:GetPlayerType(3) and rank ~= 'BETA' then 
+			sendprivatemessage(plr, 'voidwaremoment')
 		end
 	end
 	for i,v in next, playersService:GetPlayers() do 
 		task.spawn(whitelistFunction, v) 
 	end 
 	table.insert(vapeConnections, playersService.PlayerAdded:Connect(whitelistFunction))
-	if RenderFunctions:GetPlayerType(1) ~= 'STANDARD' then 
-		InfoNotification('Render Whitelist', 'You are now authenticated, welcome!', 4.5)
+	if VoidwareFunctions:GetPlayerType(1) ~= 'STANDARD' then 
+		InfoNotification('Voidware Whitelist', 'You are now authenticated, welcome!', 4.5)
 	end
 end)
 
@@ -6866,7 +6854,7 @@ runFunction(function()
 	TargetHP.TextYAlignment = Enum.TextYAlignment.Top
 
 	local NewTargetHud
-	local NewRenderHud 
+	local NewVoidwareHud 
 	local HudCorner
 	local PlayerProfile
 	local UICorner
@@ -6883,9 +6871,9 @@ runFunction(function()
 	local HudStroke
 	local HealthStroke
 	local UIGradient2
-	local NewRender = {}
+	local NewVoidware = {}
 	NewTargetHud = Instance.new("ScreenGui")
-    NewRenderHud = Instance.new("Frame")
+    NewVoidwareHud = Instance.new("Frame")
     HudCorner = Instance.new("UICorner")
     PlayerProfile = Instance.new("ImageLabel")
     UICorner = Instance.new("UICorner")
@@ -6907,19 +6895,19 @@ runFunction(function()
     NewTargetHud.Parent = game.Players.LocalPlayer.PlayerGui
     NewTargetHud.ResetOnSpawn = false
     
-    NewRenderHud.Name = "NewRenderHud"
-    NewRenderHud.Active = true
-    NewRenderHud.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    NewRenderHud.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    NewRenderHud.BorderSizePixel = 0
-    NewRenderHud.Size = UDim2.new(0, 281, 0, 88)
+    NewVoidwareHud.Name = "NewVoidwareHud"
+    NewVoidwareHud.Active = true
+    NewVoidwareHud.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    NewVoidwareHud.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    NewVoidwareHud.BorderSizePixel = 0
+    NewVoidwareHud.Size = UDim2.new(0, 281, 0, 88)
 
     HudCorner.CornerRadius = UDim.new(0, 20)
     HudCorner.Name = "HudCorner"
-    HudCorner.Parent = NewRenderHud
+    HudCorner.Parent = NewVoidwareHud
     
     PlayerProfile.Name = "PlayerProfile"
-    PlayerProfile.Parent = NewRenderHud
+    PlayerProfile.Parent = NewVoidwareHud
     PlayerProfile.BackgroundColor3 = Color3.fromRGB(19, 22, 29)
     PlayerProfile.BorderColor3 = Color3.fromRGB(0, 0, 0)
     PlayerProfile.BorderSizePixel = 0
@@ -6931,7 +6919,7 @@ runFunction(function()
     UICorner.Parent = PlayerProfile
     
     Names.Name = "Name"
-    Names.Parent = NewRenderHud
+    Names.Parent = NewVoidwareHud
     Names.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Names.BackgroundTransparency = 1.000
     Names.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -6963,7 +6951,7 @@ runFunction(function()
     DisPlayName.TextYAlignment = Enum.TextYAlignment.Top
     
     HealthBar.Name = "HealthBar"
-    HealthBar.Parent = NewRenderHud
+    HealthBar.Parent = NewVoidwareHud
     HealthBar.BackgroundColor3 = Color3.fromRGB(22, 27, 35)
     HealthBar.BorderColor3 = Color3.fromRGB(0, 0, 0)
     HealthBar.BorderSizePixel = 0
@@ -7008,16 +6996,16 @@ runFunction(function()
     HudGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(25, 28, 38)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(31, 32, 50))}
     HudGradient.Rotation = 30
     HudGradient.Name = "HudGradient"
-    HudGradient.Parent = NewRenderHud
+    HudGradient.Parent = NewVoidwareHud
     
     HudAspectRatio.Name = "HudAspectRatio"
-    HudAspectRatio.Parent = NewRenderHud
+    HudAspectRatio.Parent = NewVoidwareHud
     HudAspectRatio.AspectRatio = 3.193
     
     HudStroke.Color = Color3.fromRGB(255, 255, 255)
     HudStroke.Thickness = 4
     HudStroke.Name = "HudStroke"
-    HudStroke.Parent = NewRenderHud
+    HudStroke.Parent = NewVoidwareHud
     
     HealthStroke.Thickness = 0.699999988079071
     HealthStroke.Name = "HealthStroke"
@@ -7198,7 +7186,7 @@ runFunction(function()
 	end
 	local function updateTargetUI3(target)
 		if type(target) ~= 'table' or target.Player == nil then 
-			NewRenderHud.Visible = GuiLibrary.MainGui.ScaledGui.ClickGui.Visible
+			NewVoidwareHud.Visible = GuiLibrary.MainGui.ScaledGui.ClickGui.Visible
 			targetactive = false
 			return 
 		end
@@ -7207,7 +7195,7 @@ runFunction(function()
 				if HudAnimation.Enabled then
 					UIGradient2.Rotation = UIGradient2.Rotation + 3
 				end
-			until (not NewRender.Enabled)
+			until (not NewVoidware.Enabled)
 		end)
 		local health = (target.Humanoid and target.Humanoid.Health or isAlive(target.Player) and target.Player.Character.Humanoid.Health or 0)
 		local maxhealth = (target.Humanoid and target.Humanoid.MaxHealth or isAlive(target.Player, true) and target.Player.Character.Humanoid.MaxHealth or 100)
@@ -7216,7 +7204,7 @@ runFunction(function()
 		if target.Player.UserId == 1443379645 then 
 			npctarget = true
 		end
-		NewRenderHud.Visible = true
+		NewVoidwareHud.Visible = true
 		tweenService:Create(HealthBarFull, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {Size = UDim2.new(0, (health == maxhealth or npctarget) and 132 or 132 - (bestOffsetX(damage, 100)), 0, 15)}):Play()
 		PlayerHealth.Text = ((math.round(health))..'.0%')
 		PlayerProfile.Image = 'rbxthumb://type=AvatarHeadShot&id='..(target.Player.UserId)..'&w=420&h=420'
@@ -7249,13 +7237,13 @@ runFunction(function()
 		TargetName.Text = (target.Player.DisplayName or target.Player.Name or 'Target')
 		
 	end
-	local RenderUI = GuiLibrary.CreateCustomWindow({
-		Name = 'OG Render HUD',
+	local VoidwareUI = GuiLibrary.CreateCustomWindow({
+		Name = 'OG Voidware HUD',
 		Icon = 'vape/assets/TargetIcon3.png',
 		IconSize = 16
 	})
-	local NewRenderUI = GuiLibrary.CreateCustomWindow({
-		Name = 'Render HUD',
+	local NewVoidwareUI = GuiLibrary.CreateCustomWindow({
+		Name = 'Voidware HUD',
 		Icon = 'vape/assets/TargetIcon3.png',
 		IconSize = 16
 	})
@@ -7275,16 +7263,16 @@ runFunction(function()
 			ModrenUI.SetVisible(calling)
 		end
 	})
-	NewRender = GuiLibrary.ObjectsThatCanBeSaved.TargetHUDWindow.Api.CreateOptionsButton({
-		Name = 'Render',
+	NewVoidware = GuiLibrary.ObjectsThatCanBeSaved.TargetHUDWindow.Api.CreateOptionsButton({
+		Name = 'Voidware',
 		Function = function(calling)		
-			NewRenderUI.SetVisible(calling)
+			NewVoidwareUI.SetVisible(calling)
 		end
 	})
-	local RenderOG = GuiLibrary.ObjectsThatCanBeSaved.TargetHUDWindow.Api.CreateOptionsButton({
-		Name = 'Render Original',
+	local VoidwareOG = GuiLibrary.ObjectsThatCanBeSaved.TargetHUDWindow.Api.CreateOptionsButton({
+		Name = 'Voidware Original',
 		Function = function(calling)
-			RenderUI.SetVisible(calling)
+			VoidwareUI.SetVisible(calling)
 		end
 	})
 	local VoidwareHUD =  GuiLibrary.ObjectsThatCanBeSaved.TargetHUDWindow.Api.CreateOptionsButton({
@@ -7294,7 +7282,7 @@ runFunction(function()
 		end
 	})
 
-	RenderOG.CreateColorSlider({
+	VoidwareOG.CreateColorSlider({
 		Name = 'Background Color',
 		Function = function(h, s, v)
 			targetui.BackgroundColor3 = Color3.fromHSV(h, s, v)
@@ -7302,7 +7290,7 @@ runFunction(function()
 	})
 
 	local rendercolor1 = {Hue = 0, Sat = 0, Value = 0}
-	local renderogcolor = RenderOG.CreateColorSlider({
+	local renderogcolor = VoidwareOG.CreateColorSlider({
 		Name = 'Outline Color 1',
 		Function = function(h, s, v)
 			targetstrokeround.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(h, s, v)), ColorSequenceKeypoint.new(1, Color3.fromHSV(rendercolor1.Hue, rendercolor1.Sat, rendercolor1.Value))})
@@ -7310,7 +7298,7 @@ runFunction(function()
 	})
 
 	local rendercolor2 = {Hue = 0, Sat = 0, Value = 0}
-	renderogcolor2 = RenderOG.CreateColorSlider({
+	renderogcolor2 = VoidwareOG.CreateColorSlider({
 		Name = 'Outline Color 2',
 		Function = function()
 			targetstrokeround.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(renderogcolor.Hue, renderogcolor.Sat, renderogcolor.Value)), ColorSequenceKeypoint.new(1, Color3.fromHSV(renderogcolor2.Hue, renderogcolor2.Sat, renderogcolor2.Value))})
@@ -7319,14 +7307,14 @@ runFunction(function()
 
 	
 	local newrendercolor2 = {Hue = 0, Sat = 0, Value = 0}
-	local newrendercolor = NewRender.CreateColorSlider({
+	local newrendercolor = NewVoidware.CreateColorSlider({
 		Name = 'Outline Color 1',
 		Function = function(h, s, v) 
 			UIGradient2.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(h, s, v)), ColorSequenceKeypoint.new(1, Color3.fromHSV(newrendercolor2.Hue, newrendercolor2.Sat, newrendercolor2.Value))})
 		end
 	})
 
-	newrenderuicolor2 = NewRender.CreateColorSlider({
+	newrenderuicolor2 = NewVoidware.CreateColorSlider({
 		Name = 'Outline Color 2',
 		Function = function(h, s, v) 
 			UIGradient2.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(newrendercolor.Hue, newrendercolor.Sat, newrendercolor.Value)), ColorSequenceKeypoint.new(1, Color3.fromHSV(h, s, v))})
@@ -7335,21 +7323,21 @@ runFunction(function()
 	
 
 	local newrenderhealthbarcolor2 = {Hue = 0, Sat = 0, Value = 0}
-	local renderhealthbarcolor = NewRender.CreateColorSlider({
+	local renderhealthbarcolor = NewVoidware.CreateColorSlider({
 		Name = 'Healthbar Color 1',
 		Function = function(h, s, v) 
 			UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(h, s, v)), ColorSequenceKeypoint.new(1, Color3.fromHSV(newrenderhealthbarcolor2.Hue, newrenderhealthbarcolor2.Sat, newrenderhealthbarcolor2.Value))})
 		end
 	})
 
-	newrenderuicolor2 = NewRender.CreateColorSlider({
+	newrenderuicolor2 = NewVoidware.CreateColorSlider({
 		Name = 'Healthbar Color 2',
 		Function = function(h, s, v) 
 			UIGradient.Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromHSV(renderhealthbarcolor.Hue, renderhealthbarcolor.Sat, renderhealthbarcolor.Value)), ColorSequenceKeypoint.new(1, Color3.fromHSV(h, s, v))})
 		end
 	})
 	
-	HudAnimation = NewRender.CreateToggle({
+	HudAnimation = NewVoidware.CreateToggle({
 		Name = 'Gradient Animation',
 		Function = function(calling) 
 			HudAnimation.Enabled = calling
@@ -7357,14 +7345,14 @@ runFunction(function()
 		Default = true
 	})
 
-	RenderOG.CreateColorSlider({
+	VoidwareOG.CreateColorSlider({
 		Name = 'Healthbar Color',
 		Function = function(h, s, v)
 			targethealthbar.BackgroundColor3 = Color3.fromHSV(h, s, v)
 		end
 	})
 
-	RenderOG.CreateColorSlider({
+	VoidwareOG.CreateColorSlider({
 		Name = 'Healthbar Background Color',
 		Function = function(h, s, v)
 			targethealthbarBK.BackgroundColor3 = Color3.fromHSV(h, s, v) 
@@ -7407,16 +7395,16 @@ runFunction(function()
 		end
 	})
 	
-	RenderStore.UpdateTargetUI = function(...)
+	VoidwareStore.UpdateTargetUI = function(...)
 		pcall(updateTargetUI, ...)
 		pcall(updateTargetUI2, ...)
 		pcall(updateTargetUI3, ...)
 		pcall(updateTargetUI4, ...)
 	end
 
-	targetui.Parent = RenderUI.GetCustomChildren()
+	targetui.Parent = VoidwareUI.GetCustomChildren()
 	targetinfomainframe.Parent = VoidwareUI.GetCustomChildren()
-	NewRenderHud.Parent = NewRenderUI.GetCustomChildren()
+	NewVoidwareHud.Parent = NewVoidwareUI.GetCustomChildren()
 	TargetInfo.Parent = ModrenUI.GetCustomChildren()
 	table.insert(vapeConnections, GuiLibrary.MainGui.ScaledGui.ClickGui:GetPropertyChangedSignal('Visible'):Connect(function()
 		if GuiLibrary.MainGui.ScaledGui.ClickGui.Visible then 
@@ -7532,7 +7520,7 @@ runFunction(function()
 		HoverText = 'Stops most loggers',
 		Function = function(callback)
 			if callback then
-				loadstring(RenderFunctions:GetFile('scripts/antilogger.lua'))()
+				loadstring(VoidwareFunctions:GetFile('scripts/antilogger.lua'))()
 			end
 		end
 	})
@@ -7553,10 +7541,10 @@ runFunction(function()
 		Function = function(callback)
 			if callback then 
 				ServerHop.ToggleButton()
-				if RenderStore.serverhopping then 
+				if VoidwareStore.serverhopping then 
 					return
 				end
-				RenderStore.serverhopping = true
+				VoidwareStore.serverhopping = true
 				InfoNotification('ServerHop', 'Searching for a new server..', 10)
 				local popularcheck = ServerHopSort.Value == 'Popular'
 				local performancecheck = ServerHopSort.Value == 'Performance'
@@ -7581,11 +7569,11 @@ runFunction(function()
 		HoverText = 'Automatically rejoins the game on disconnect/kick.',
 		Function = function(callback)
 			if callback then 
-				table.insert(AutoRejoin.Connections, RenderStore.Bindable.PlayerKick.Event:Connect(function()
-					if RenderStore.serverhopping then 
+				table.insert(AutoRejoin.Connections, VoidwareStore.Bindable.PlayerKick.Event:Connect(function()
+					if VoidwareStore.serverhopping then 
 						return 
 					end
-					RenderStore.serverhopping = true
+					VoidwareStore.serverhopping = true
 					if not AutoRejoinSwitch.Enabled then 
 						InfoNotification('AutoRejoin', 'Rejoining the server..', 10)
 						teleportService:Teleport(game.PlaceId)
@@ -7668,7 +7656,7 @@ runFunction(function()
 	local FPSBoostNoCharacter = {}
 	local FPSBoostExplosion = {}
 	local FPSBoostShadows = {}
-	local FPSBoostLessRender = {}
+	local FPSBoostLessVoidware = {}
 	local textures = {}
 	local particles = {}
 	local meshtextures = {}
@@ -7676,8 +7664,8 @@ runFunction(function()
 	local partmaterials = {}
 	local materials2 = {}
 	local cameraeffects = {}
-	local oldquality = settings().Rendering.QualityLevel
-	local oldmeshquality = settings().Rendering.MeshPartDetailLevel
+	local oldquality = settings().Voidwareing.QualityLevel
+	local oldmeshquality = settings().Voidwareing.MeshPartDetailLevel
 	local function modifypart(part)
 		local charitem = characterDescendant(part)
 		if not FPSBoostNoCharacter.Enabled then
@@ -7728,7 +7716,7 @@ runFunction(function()
 			table.insert(cameraeffects, part)
 		end
 	end
-	FPSBoost = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	FPSBoost = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'FPSBoost',
 		HoverText = 'Removes textures of objects to slightly improve\nyour framerate.',
 		Function = function(callback)
@@ -7744,9 +7732,9 @@ runFunction(function()
 						v:Destroy()
 					end
 				end
-				if FPSBoostLessRender.Enabled then 
-					settings().Rendering.QualityLevel = 1
-					settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
+				if FPSBoostLessVoidware.Enabled then 
+					settings().Voidwareing.QualityLevel = 1
+					settings().Voidwareing.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level04
 				end
 				for i,v in cameraeffects do 
 					pcall(function() v.Enabled = true end)
@@ -7762,8 +7750,8 @@ runFunction(function()
 					if not isEnabled('Fullbright') then
 						lightingService.GlobalShadows = false
 					end
-					settings().Rendering.QualityLevel = oldquality
-					settings().Rendering.MeshPartDetailLevel = oldmeshquality
+					settings().Voidwareing.QualityLevel = oldquality
+					settings().Voidwareing.MeshPartDetailLevel = oldmeshquality
 				end
 			else
 				for texturepart, old in textures do 
@@ -7835,8 +7823,8 @@ runFunction(function()
 			end
 		end
 	})
-	FPSBoostLessRender = FPSBoost.CreateToggle({
-		Name = 'Less Render',
+	FPSBoostLessVoidware = FPSBoost.CreateToggle({
+		Name = 'Less Voidware',
 		Function = function() 
 			if FPSBoost.Enabled then 
 				FPSBoost.ToggleButton()
@@ -7851,7 +7839,7 @@ runLunar(function()
 	local ZoomUnlockerMode = {Value = 'Infinite'}
 	local ZoomUnlockerZoom = {Value = 25}
 	local ZoomConnection, OldZoom = nil, nil
-	ZoomUnlocker = GuiLibrary.ObjectsThatCanBeSaved['RenderWindow'].Api.CreateOptionsButton({
+	ZoomUnlocker = GuiLibrary.ObjectsThatCanBeSaved['VoidwareWindow'].Api.CreateOptionsButton({
 		Name = 'CameraUnlocker',
         HoverText = 'Unlocks the abillity to zoom more',
 		Function = function(callback)
@@ -7941,7 +7929,7 @@ runFunction(function()
 			end
 		end))
 	end
-	FireEffect = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	FireEffect = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'FireEffect',
 		HoverText = 'A client side fire effect for your character.',
 		Function = function(callback)
@@ -8004,7 +7992,7 @@ runFunction(function()
 		HoverText = 'Mimics others in chat.',
 		Function = function(callback)
 			if callback then 
-				table.insert(ChatMimic.Connections, RenderStore.MessageReceived.Event:Connect(function(plr, text)
+				table.insert(ChatMimic.Connections, VoidwareStore.MessageReceived.Event:Connect(function(plr, text)
 					task.wait()
 					if plr == lplr or lastsent[plr] and lastsent[plr] > tick() then 
 						return 
@@ -8063,7 +8051,7 @@ runFunction(function()
 		if not PlayerTP.Enabled then 
 			return 
 		end
-		if #RenderStore.tweens > 0 then 
+		if #VoidwareStore.tweens > 0 then 
 			PlayerTP.ToggleButton()
 			return 
 		end
@@ -8276,9 +8264,9 @@ runFunction(function()
 		Function = function(callback)
 			if callback then 
 				repeat
-					if shared.VapeFullyLoaded and PingValue.Value <= RenderStore.ping and not detected then 
+					if shared.VapeFullyLoaded and PingValue.Value <= VoidwareStore.ping and not detected then 
 						detected = true 
-						warningNotification('PingDetector', 'Your ping is currently at '..math.floor(RenderStore.ping)..'.', 15)
+						warningNotification('PingDetector', 'Your ping is currently at '..math.floor(VoidwareStore.ping)..'.', 15)
 						if PingSwitch.Enabled then 
 							switchserver(function()
 								warningNotification('PingDetector', 'Teleporting to a new server.', 10)
@@ -8425,11 +8413,11 @@ runLunar(function()
 				local timetaken = rounder(tick() - LunarLoad)
 				local timeformat = string.format('%.1f', timetaken)
 				local whitelisted = false
-				if not RenderFunctions:GetPlayerType() ~= 'STANDARD' then
+				if not VoidwareFunctions:GetPlayerType() ~= 'STANDARD' then
 					whitelisted = true
 				end
 				wait(3)				
-				InfoNotification('Render', 'Loaded in '..timeformat..'s. Logged in as '..lplr.Name..', Whitelisted: ' ..(whitelisted and 'true' or 'false').. ' .', LoaderDuration.Value)
+				InfoNotification('Voidware', 'Loaded in '..timeformat..'s. Logged in as '..lplr.Name..', Whitelisted: ' ..(whitelisted and 'true' or 'false').. ' .', LoaderDuration.Value)
 			end
 		end,
         Default = false
@@ -8454,7 +8442,7 @@ runLunar(function()
 	local chatPosY = {Value = 4}
 	local chatScaleX = {Value = 0.85}
 	local chatScaleY = {Value = 1}
-	chatResize = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	chatResize = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
 		Name = "ChatResize",
 		HoverText = "Resizes the chat",
 		Function = function(callback)
@@ -8710,7 +8698,7 @@ runLunar(function()
 	}
 	local customMouseIcon = {Enabled = false}
 	local customIcon = {Value = ""}
-	mouseMod = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	mouseMod = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
 		Name = "MouseMod",
 		HoverText = "Modifies your cursor's image",
 		Function = function(callback)
@@ -8760,7 +8748,7 @@ runLunar(function()
 		Main = TimeChangerTime.Value,
 		CurrentTime = lightingService.TimeOfDay
 	}
-	TimeChanger = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	TimeChanger = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
 		Name = "TimeAdjuster",
         HoverText = "Changes the time",
 		Function = function(callback)
@@ -9016,7 +9004,7 @@ runLunar(function()
 	local SnowflakesSpread = {Value = 35}
 	local SnowflakesRate = {Value = 28}
 	local SnowflakesHigh = {Value = 100}
-	GameWeather = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	GameWeather = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
 		Name = 'GameWeather',
 		HoverText = 'Changes the weather',
 		Function = function(callback) 
@@ -9234,7 +9222,7 @@ runLunar(function()
 	local chatVersion = function()
 		if game.Chat:GetChildren()[1] then return true else return false end
 	end
-	chatDisable = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	chatDisable = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
 		Name = "ChatDisable",
 		HoverText = "Disables the chat",
 		Function = function(callback)
@@ -9599,7 +9587,7 @@ runLunar(function()
 	local timeConnection
 	local ThemesModule = {Enabled = false}
 	local ThemesDropdown = {Value = "Lunar Vape New"}
-	ThemesModule = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"]["CreateOptionsButton"]({
+	ThemesModule = GuiLibrary["ObjectsThatCanBeSaved"]["VoidwareWindow"]["Api"]["CreateOptionsButton"]({
 		Name = "Themes",
 		HoverText = 'Changes the theme',
 		ExtraText = function(val) return ThemesDropdown.Value end,
@@ -9752,7 +9740,7 @@ end)
 					repeat task.wait()
 						if MovementDisablerR.Enabled then
 							lplr.Character.Humanoid.AutoRotate = false
-							runService.RenderStepped:Connect(function()
+							runService.VoidwareStepped:Connect(function()
 								movedir += lplr.Character.Humanoid.MoveDirection
 								lplr.Character.Humanoid:Move(movedir, true)
 								movedir = Vector3.new()
@@ -9834,90 +9822,6 @@ runLunar(function()
 end)
 
 runFunction(function()
-	local Translation = {}
-	local language = {Value = 'chinese'} 
-	local oldnames = {}
-	local sitrequests = 0
-	local function addtranslated(old, translated)
-		if not isfolder('vape/Render/translations') then 
-			makefolder('vape/Render/translations') 
-		end
-		local success, data = pcall(function()
-			return httpService:JSONDecode(readfile('vape/Render/translations/'..language.Value:lower()..'.json')) 
-		end) 
-		if type(data) ~= 'table' then data = {} end 
-		data[old] = translated 
-		writefile('vape/Render/translations/'..language.Value:lower()..'.json', httpService:JSONEncode(data))
-	end
-	local function translatedata(text)
-		local success, data = pcall(function()
-			return httpService:JSONDecode(readfile('vape/Render/translations/'..language.Value:lower()..'.json')) 
-		end) 
-		if type(data) ~= 'table' then data = {} end  
-		if data[text] then 
-			return (data[text] ~= '' and data[text])
-		end
-		local timeTaken = tick()
-		local translation = httprequest({Url = 'https://translate.renderintents.xyz', Method = 'GET', Headers = {Language = language.Value, Text = text}}) 
-		sitrequests += 1
-		if translation.StatusCode == 200 then 
-			local new = httpService:JSONDecode(translation.Body).translated
-			addtranslated(text, new) 
-			timeTaken = (tick() - timeTaken) 
-			if timeTaken < 10 and sitrequests >= 9 then -- site rate limits lol 
-				task.wait(10 - timeTaken)
-				sitrequests = 0
-			end
-			return (new ~= '' and new)
-		end
-	end
-	Translation = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
-		Name = 'Translation',
-		HoverText = 'Translates stuff in vape.',
-		Function = function(calling) 
-			if calling then 
-				for i,v in next, GuiLibrary.ObjectsThatCanBeSaved do 
-					if v.Type == 'OptionsButton' and i ~= 'TranslationOptionsButton' then
-						pcall(function()
-							if not Translation.Enabled then return end
-							local translated = translatedata(v.Object.ButtonText.Text)
-							if translated and Translation.Enabled then 
-								oldnames[i] = {ApiText = v.Api.Name, ObjectText = v.Object.ButtonText.Text}
-								v.Object.ButtonText.Text = translated
-								v.Api.Name = translated
-								if v.Api.Enabled then 
-									GuiLibrary.UpdateTextGUI() 
-								end
-							end 
-						end)
-					end 
-				end
-			else
-				if vapeInjected then 
-					for i,v in next, oldnames do 
-						GuiLibrary.ObjectsThatCanBeSaved[i].Object.ButtonText.Text = v.ObjectText
-						GuiLibrary.ObjectsThatCanBeSaved[i].Api.Name = v.ApiText 
-					end
-					GuiLibrary.UpdateTextGUI()  
-					table.clear(oldnames)
-				end
-			end 
-		end
-	})
-	language = Translation.CreateDropdown({
-		Name = 'Language', 
-		List = {'Spanish', 'French', 'Japanese', 'Chinese', 'Hindi', 'Russian'},
-		Function = function(calling) 
-			task.spawn(function()
-				if calling == false or not shared.VapeFullyLoaded then return end
-				Translation.ToggleButton()
-				if not Translation.Enabled then Translation.ToggleButton() end 
-			end)
-		end,
-	})
-end)
-
-runFunction(function()
 	local BubbleMods = {}
 	local BubbleModsColorToggle = {}
 	local BubbleModsTextSizeToggle = {}
@@ -9951,7 +9855,7 @@ runFunction(function()
 			table.insert(chatbubbles, bubble)
 		end)
 	end
-	BubbleMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	BubbleMods = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'BubbleMods',
 		HoverText = 'Mods the bubble chat experience.',
 		Function = function(calling) 

@@ -1,14 +1,3 @@
--- Render Custom Vape Signed File
---[[
-
-    Render Intents | Bedwars lobby
-    The #1 vape mod you'll ever see.
-
-    Version: 1.5.1
-    discord.gg/render
-
-]]
-
 local GuiLibrary = shared.GuiLibrary
 local players = game:GetService('Players')
 local textservice = game:GetService('TextService')
@@ -131,18 +120,18 @@ local function getSpeedMultiplier(reduce)
 	return reduce and speed ~= 1 and speed * (0.9 - (0.15 * math.floor(speed))) or speed
 end
 
-local RunLoops = {RenderStepTable = {}, StepTable = {}, HeartTable = {}}
+local RunLoops = {VoidwareStepTable = {}, StepTable = {}, HeartTable = {}}
 do
-	function RunLoops:BindToRenderStep(name, num, func)
-		if RunLoops.RenderStepTable[name] == nil then
-			RunLoops.RenderStepTable[name] = game:GetService('RunService').RenderStepped:Connect(func)
+	function RunLoops:BindToVoidwareStep(name, num, func)
+		if RunLoops.VoidwareStepTable[name] == nil then
+			RunLoops.VoidwareStepTable[name] = game:GetService('RunService').VoidwareStepped:Connect(func)
 		end
 	end
 
-	function RunLoops:UnbindFromRenderStep(name)
-		if RunLoops.RenderStepTable[name] then
-			RunLoops.RenderStepTable[name]:Disconnect()
-			RunLoops.RenderStepTable[name] = nil
+	function RunLoops:UnbindFromVoidwareStep(name)
+		if RunLoops.VoidwareStepTable[name] then
+			RunLoops.VoidwareStepTable[name]:Disconnect()
+			RunLoops.VoidwareStepTable[name] = nil
 		end
 	end
 
@@ -332,7 +321,7 @@ local function friendCheck(plr, recolor)
 	return nil
 end
 
-local function renderNametag(plr)
+local function voidwareNametag(plr)
 	if WhitelistFunctions:CheckPlayerType(plr) ~= 'DEFAULT' or WhitelistFunctions.WhitelistTable.chattags[WhitelistFunctions:Hash(plr.Name..plr.UserId)] then
 		local playerlist = game:GetService('CoreGui'):FindFirstChild('PlayerList')
 		if playerlist then
@@ -364,8 +353,8 @@ end
 
 task.spawn(function()
 	repeat task.wait() until WhitelistFunctions.Loaded
-	for i,v in pairs(players:GetChildren()) do renderNametag(v) end
-	players.PlayerAdded:Connect(renderNametag)
+	for i,v in pairs(players:GetChildren()) do voidwareNametag(v) end
+	players.PlayerAdded:Connect(voidwareNametag)
 end)
 
 GuiLibrary['RemoveObject']('SilentAimOptionsButton')
@@ -682,7 +671,7 @@ end)
 
 runFunction(function()
 	local CameraFix = {['Enabled'] = false}
-	CameraFix = GuiLibrary['ObjectsThatCanBeSaved']['RenderWindow']['Api'].CreateOptionsButton({
+	CameraFix = GuiLibrary['ObjectsThatCanBeSaved']['VoidwareWindow']['Api'].CreateOptionsButton({
 		['Name'] = 'CameraFix',
 		['Function'] = function(calling)
 			if calling then
@@ -994,7 +983,7 @@ runFunction(function()
 			repeat
 				if (not AnticheatBypass['Enabled']) then break end
 				local ping = math.floor(tonumber(game:GetService('Stats'):FindFirstChild('PerformanceStats').Ping:GetValue()))
-				local fps = math.floor(1 / game:GetService('RunService').RenderStepped:Wait())
+				local fps = math.floor(1 / game:GetService('RunService').VoidwareStepped:Wait())
 				if #pinglist >= 10 then 
 					table.remove(pinglist, 1)
 				end
@@ -1805,7 +1794,7 @@ runFunction(function()
 		end
 	}
 
-	OldBedwars = GuiLibrary['ObjectsThatCanBeSaved']['RenderWindow']['Api'].CreateOptionsButton({
+	OldBedwars = GuiLibrary['ObjectsThatCanBeSaved']['VoidwareWindow']['Api'].CreateOptionsButton({
 		['Name'] = 'GameTheme',
 		['Function'] = function(calling) 
 			if calling then 
@@ -1965,7 +1954,7 @@ runFunction(function()
 	local DamageIndicatorFontToggle = {}
 	local DamageIndicatorFont = {Value = 'GothamBlack'}
 	local DamageIndicatorTextObjects = {}
-	DamageIndicator = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	DamageIndicator = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'DamageIndicator',
 		Function = function(calling)
 			if calling then
@@ -2065,7 +2054,7 @@ runFunction(function()
 			end 
 		end
 	end
-	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+	HotbarMods = GuiLibrary.ObjectsThatCanBeSaved.VoidwareWindow.Api.CreateOptionsButton({
 		Name = 'HotbarMods',
 		HoverText = 'Add customization to your hotbar.',
 		Function = function(calling)

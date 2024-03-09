@@ -1,5 +1,5 @@
 if shared.VapeExecuted then
-	local VERSION = "Render Vape"
+	local VERSION = "Voidware Vape"
 	local baseDirectory = (shared.VapePrivate and "vapeprivate/" or "vape/")
 	local vapeAssetTable = {
 		["vape/assets/AddItem.png"] = "rbxassetid://13350763121",
@@ -64,7 +64,7 @@ if shared.VapeExecuted then
 		["vape/assets/WindowBlur.png"] = "rbxassetid://13350795660",
 		["vape/assets/WorldIcon.png"] = "rbxassetid://13350796199",
 		["vape/assets/VapeIcon.png"] = "rbxassetid://13350808582",
-		["vape/assets/RenderIcon.png"] = "rbxassetid://13350832775",
+		["vape/assets/VoidwareIcon.png"] = "rbxassetid://13350832775",
 		["vape/assets/VapeLogo1.png"] = "rbxassetid://13350860863",
 		["vape/assets/VapeLogo3.png"] = "rbxassetid://13350872035",
 		["vape/assets/VapeLogo2.png"] = "rbxassetid://13350876307",
@@ -107,7 +107,7 @@ if shared.VapeExecuted then
 	local translations = shared.VapeTranslation or {}
 	local translatedlogo = false
 
-	GuiLibrary.ColorStepped = runService.RenderStepped:Connect(function()
+	GuiLibrary.ColorStepped = runService.VoidwareStepped:Connect(function()
 		local col = (tick() * 0.25 * GuiLibrary.RainbowSpeed) % 1 
 		for i, v in pairs(GuiLibrary.RainbowSliders) do 
 			v.SetValue(col)
