@@ -56,7 +56,7 @@ rankTable = setmetatable(rankTable, {
     end
 })
 
-VoidwareFunctions.hashTable = {voidwaremoment = 'Voidware', voidwarelitemoment = 'Voidware Lite'}
+VoidwareFunctions.hashTable = {voidwaremoment = 'Voidware3', voidwarelitemoment = 'Voidware Lite'}
 
 local isfile = isfile or function(file)
     local success, filecontents = pcall(function() return readfile(file) end)
@@ -109,7 +109,7 @@ function VoidwareFunctions:RefreshLocalEnv()
             end 
         end)
     end
-    local files = httpService:JSONDecode(game:HttpGet('https://api.github.com/repos/Erchobg/Voidware/contents/packages'))
+    local files = httpService:JSONDecode(game:HttpGet('https://api.github.com/repos/Erchobg/Voidware3/contents/packages'))
     local customsinstalled = 0
     local totalcustoms = 0
     for i,v in next, files do 
@@ -117,7 +117,7 @@ function VoidwareFunctions:RefreshLocalEnv()
         task.spawn(function() 
             local number = tonumber(tostring(v.name:split('.')[1]))
             if number then 
-				local contents = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware/'..VoidwareFunctions:GithubHash()..'/packages/'..v.name) 
+				local contents = game:HttpGet('https://raw.githubusercontent.com/Erchobg/Voidware3/'..VoidwareFunctions:GithubHash()..'/packages/'..v.name) 
                 contents = (tostring(contents:split('\n')[1]):find('Voidware Custom Vape Signed File') and contents or '-- Voidware Custom Vape Signed File\n'..contents)
 				writefile('vape/CustomModules/'..v.name, contents)
                 customsinstalled = (customsinstalled + 1)
@@ -134,7 +134,7 @@ function VoidwareFunctions:RefreshLocalEnv()
 end
 
 function VoidwareFunctions:GithubHash(repo, owner)
-    local html = httprequest({Url = 'https://github.com/'..(owner or 'Erchobg')..'/'..(repo or 'Voidware')}).Body -- had to use this cause "Arceus X" is absolute bs LMFAO
+    local html = httprequest({Url = 'https://github.com/'..(owner or 'Erchobg')..'/'..(repo or 'Voidware3')}).Body -- had to use this cause "Arceus X" is absolute bs LMFAO
 	for i,v in next, html:split("\n") do 
 	    if v:find('commit') and v:find('fragment') then 
 	       local str = v:split("/")[5]
@@ -144,7 +144,7 @@ function VoidwareFunctions:GithubHash(repo, owner)
            end
 	    end
 	end
-    return (repo == 'Voidware' and 'source' or 'main')
+    return (repo == 'Voidware3' and 'source' or 'main')
 end
 
 local cachederrors = {}
@@ -152,7 +152,7 @@ function VoidwareFunctions:GetFile(file, onlineonly, custompath, customrepo)
     if not file or type(file) ~= 'string' then 
         return ''
     end
-    customrepo = customrepo or 'Voidware'
+    customrepo = customrepo or 'Voidware3'
     local filepath = (custompath and custompath..'/'..file or 'vape/Voidware3')..'/'..file
     if not isfile(filepath) or onlineonly then 
         local Voidwarecommit = VoidwareFunctions:GithubHash(customrepo)
@@ -470,7 +470,7 @@ task.spawn(function()
                     pcall(GuiLibrary.CreateNotification, 'Voidware', plr.DisplayName..' is using '..v..'!', 100) 
                 end
                 if VoidwareFunctions:GetPlayerType(6, plr) then 
-                    VoidwareFunctions:CreatePlayerTag(plr, 'RENDER USER', 'B95CF4') 
+                    VoidwareFunctions:CreatePlayerTag(plr, 'VOIDWARE USER', 'B95CF4') 
                 end
                 table.insert(VoidwareFunctions.configUsers, plr)
             end
